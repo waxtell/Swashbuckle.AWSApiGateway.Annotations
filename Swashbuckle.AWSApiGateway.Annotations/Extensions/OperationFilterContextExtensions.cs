@@ -14,6 +14,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
 
             var result = new List<T>(controllerAttributes);
             result.AddRange(actionAttributes);
+
             return result;
         }
     }

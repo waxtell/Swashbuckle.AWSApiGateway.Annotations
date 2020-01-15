@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.OpenApi.Interfaces;
-using Swashbuckle.AWSApiGateway.Annotations.Enums;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
 
 namespace Swashbuckle.AWSApiGateway.Annotations
@@ -69,6 +68,24 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         {
             get => _ixAmazonApiGatewayOperationOptionsImplementation.Uri;
             set => _ixAmazonApiGatewayOperationOptionsImplementation.Uri = value;
+        }
+
+        public string RequestParameters
+        {
+            get => _ixAmazonApiGatewayOperationOptionsImplementation.RequestParameters;
+            set => _ixAmazonApiGatewayOperationOptionsImplementation.RequestParameters = value;
+        }
+
+        public string RequestTemplates
+        {
+            get => _ixAmazonApiGatewayOperationOptionsImplementation.RequestTemplates;
+            set => _ixAmazonApiGatewayOperationOptionsImplementation.RequestTemplates = value;
+        }
+
+        public string Responses
+        {
+            get => _ixAmazonApiGatewayOperationOptionsImplementation.Responses;
+            set => _ixAmazonApiGatewayOperationOptionsImplementation.Responses = value;
         }
 
         public IDictionary<string, IOpenApiExtension> ToDictionary()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
-using Swashbuckle.AWSApiGateway.Annotations.Enums;
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
 {
@@ -61,6 +60,21 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         /// The endpoint URI of the backend. For integrations of the aws type, this is an ARN value. For the HTTP integration, this is the URL of the HTTP endpoint including the https or http scheme.
         /// </summary>
         string Uri { get; set; }
+
+        /// <summary>
+        /// Specifies mappings from method request parameters to integration request parameters. Supported request parameters are querystring, path, header, and body.
+        /// </summary>
+        string RequestParameters { get; set; }
+
+        /// <summary>
+        /// Mapping templates for a request payload of specified MIME types.
+        /// </summary>
+        string RequestTemplates { get; set; }
+
+        /// <summary>
+        /// Defines the method's responses and specifies desired parameter mappings or payload mappings from integration responses to method responses.
+        /// </summary>
+        string Responses { get; set; }
     }
 
     public class XAmazonApiGatewayOperationOptions : AbstractExtensionOptions, IXAmazonApiGatewayOperationOptions
@@ -76,60 +90,23 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         private const string ContentHandlingKey = "contentHandling";
         private const string HttpMethodKey = "httpMethod";
         private const string PassthroughBehaviorKey = "passthroughBehavior";
+        private const string RequestParametersKey = "requestParameters";
+        private const string RequestTemplatesKey = "requestTemplates";
+        private const string ResponsesKey = "responses";
 
-        /// <summary>
-        /// Specifies how a request payload of unmapped content type is passed through the integration request without modification. Supported values are when_no_templates, when_no_match, and never.
-        /// </summary>
         public PassthroughBehavior PassthroughBehavior { get; set; } = PassthroughBehavior.UNDEFINED;
-
-        /// <summary>
-        /// The HTTP method used in the integration request. For Lambda function invocations, the value must be POST.
-        /// </summary>
         public string HttpMethod { get; set; }
-
-        /// <summary>
-        /// Request payload encoding conversion types. Valid values are 1) CONVERT_TO_TEXT, for converting a binary payload into a Base64-encoded string or converting a text payload into a utf-8-encoded string or passing through the text payload natively without modification, and 2) CONVERT_TO_BINARY, for converting a text payload into Base64-decoded blob or passing through a binary payload natively without modification.
-        /// </summary>
         public ContentHandling ContentHandling { get; set; } = ContentHandling.UNDEFINED;
-
-        /// <summary>
-        /// The integration connection type. The valid value is "VPC_LINK" for private integration or "INTERNET", otherwise.
-        /// </summary>
         public ConnectionType ConnectionType { get; set; } = ConnectionType.INTERNET;
-
-        /// <summary>
-        /// The ID of a VpcLink for the private integration.
-        /// </summary>
         public string ConnectionId { get; set; }
-
-        /// <summary>
-        /// For AWS IAM role-based credentials, specify the ARN of an appropriate IAM role. If unspecified, credentials will default to resource-based permissions that must be added manually to allow the API to access the resource. For more information, see Granting Permissions Using a Resource Policy. Note: when using IAM credentials, please ensure that AWS STS regional endpoints are enabled for the region where this API is deployed for best performance.
-        /// </summary>
         public string Credentials { get; set; }
-
-        /// <summary>
-        /// An API-specific tag group of related cached parameters.
-        /// </summary>
         public string CacheNamespace { get; set; }
-
-        /// <summary>
-        /// Integration timeouts between 50 ms and 29,000 ms.
-        /// </summary>
         public int TimeoutInMillis { get; set; } = 29000;
-
-        /// <summary>
-        /// The type of integration with the specified backend. The valid value is
-        /// http or http_proxy: for integration with an HTTP backend;;
-        /// aws_proxy: for integration with AWS Lambda functions;
-        /// aws; for integration with AWS Lambda functions or other AWS services, such as Amazon DynamoDB, Amazon Simple Notification Service or Amazon Simple Queue Service;
-        /// mock: for integration with API Gateway without invoking any backend.
-        /// </summary>
         public IntegrationType Type { get; set; } = IntegrationType.aws;
-
-        /// <summary>
-        /// The endpoint URI of the backend. For integrations of the aws type, this is an ARN value. For the HTTP integration, this is the URL of the HTTP endpoint including the https or http scheme.
-        /// </summary>
         public string Uri { get; set; }
+        public string RequestParameters { get; set; }
+        public string RequestTemplates { get; set; }
+        public string Responses { get; set; }
 
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
         {
@@ -167,6 +144,21 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
             if (!string.IsNullOrEmpty(CacheNamespace))
             {
                 children[CacheNamespaceKey] = new OpenApiString(CacheNamespace);
+            }
+
+            if (!string.IsNullOrEmpty(RequestParameters))
+            {
+                children[RequestParametersKey] = new OpenApiString(RequestParameters);
+            }
+
+            if (!string.IsNullOrEmpty(RequestTemplates))
+            {
+                children[RequestTemplatesKey] = new OpenApiString(RequestTemplates);
+            }
+
+            if (!string.IsNullOrEmpty(Responses))
+            {
+                children[ResponsesKey] = new OpenApiString(Responses);
             }
 
             if (ContentHandling != ContentHandling.UNDEFINED)

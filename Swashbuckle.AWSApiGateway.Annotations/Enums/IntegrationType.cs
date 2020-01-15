@@ -1,4 +1,5 @@
-﻿namespace Swashbuckle.AWSApiGateway.Annotations.Enums
+﻿// ReSharper disable once CheckNamespace
+namespace Swashbuckle.AWSApiGateway.Annotations
 {
     public enum IntegrationType
     {
