@@ -17,24 +17,24 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            var attributes = context.GetControllerAndActionAttributes<XAmazonApiGatewayOperation>();
+            //var attributes = context.GetControllerAndActionAttributes<XAmazonApiGatewayperation>();
             
-            var optionsClone = new XAmazonApiGatewayOperationOptions();
+            //var optionsClone = new XAmazonApiGatewayIntegrationOptions();
 
-            optionsClone.Merge(_options);
+            //optionsClone.Merge(_options);
 
-            if (attributes != null && attributes.Any())
-            {
-                foreach (var attribute in attributes)
-                {
-                    optionsClone.Merge<IXAmazonApiGatewayOperationOptions>(attribute);
-                }
-            }
+            //if (attributes != null && attributes.Any())
+            //{
+            //    foreach (var attribute in attributes)
+            //    {
+            //        optionsClone.Merge<IXAmazonApiGatewayOperationOptions>(attribute);
+            //    }
+            //}
 
-            foreach (var item in optionsClone.ToDictionary())
-            {
-                operation.Extensions[item.Key] = item.Value;
-            }
+            //foreach (var item in optionsClone.ToDictionary())
+            //{
+            //    operation.Extensions[item.Key] = item.Value;
+            //}
         }
     }
 }

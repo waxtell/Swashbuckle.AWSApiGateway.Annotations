@@ -8,7 +8,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 //    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public class XAmazonApiGatewayOperation : Attribute, IXAmazonApiGatewayOperationOptions
     {
-        private readonly XAmazonApiGatewayOperationOptions _ixAmazonApiGatewayOperationOptionsImplementation = new XAmazonApiGatewayOperationOptions();
+        private readonly XAmazonApiGatewayIntegrationOptions _ixAmazonApiGatewayOperationOptionsImplementation = new XAmazonApiGatewayIntegrationOptions();
 
         public PassthroughBehavior PassthroughBehavior
         {
