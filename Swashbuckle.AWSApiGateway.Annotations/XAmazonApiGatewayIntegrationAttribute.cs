@@ -5,8 +5,7 @@ using Swashbuckle.AWSApiGateway.Annotations.Options;
 
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-//    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-    public class XAmazonApiGatewayOperation : Attribute, IXAmazonApiGatewayOperationOptions
+    public class XAmazonApiGatewayIntegrationAttribute : Attribute, IXAmazonApiGatewayIntegrationOptions
     {
         private readonly XAmazonApiGatewayIntegrationOptions _ixAmazonApiGatewayOperationOptionsImplementation = new XAmazonApiGatewayIntegrationOptions();
 

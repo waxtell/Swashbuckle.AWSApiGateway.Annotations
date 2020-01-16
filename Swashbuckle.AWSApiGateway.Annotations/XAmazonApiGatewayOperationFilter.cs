@@ -1,4 +1,5 @@
-﻿using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using System;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
@@ -17,24 +18,34 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            //var attributes = context.GetControllerAndActionAttributes<XAmazonApiGatewayperation>();
-            
-            //var optionsClone = new XAmazonApiGatewayIntegrationOptions();
+            void Apply<TAttribute, TOptions, TIOptions>(TIOptions source) 
+                where TAttribute : Attribute, TIOptions
+                where TOptions : AbstractExtensionOptions, TIOptions
+            {
+                var attributes = context
+                                    .GetControllerAndActionAttributes<TAttribute>()
+                                    ?.ToList();
 
-            //optionsClone.Merge(_options);
+                var optionsClone = Activator.CreateInstance<TOptions>();
 
-            //if (attributes != null && attributes.Any())
-            //{
-            //    foreach (var attribute in attributes)
-            //    {
-            //        optionsClone.Merge<IXAmazonApiGatewayOperationOptions>(attribute);
-            //    }
-            //}
+                optionsClone.Merge(source);
 
-            //foreach (var item in optionsClone.ToDictionary())
-            //{
-            //    operation.Extensions[item.Key] = item.Value;
-            //}
+                if (attributes != null && attributes.Any())
+                {
+                    foreach (var attribute in attributes)
+                    {
+                        optionsClone.Merge<TIOptions>(attribute);
+                    }
+                }
+
+                foreach (var item in optionsClone.ToDictionary())
+                {
+                    operation.Extensions[item.Key] = item.Value;
+                }
+            }
+
+            Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>(_options.IntegrationOptions);
+            Apply<XAmazonApiGatewayAuthAttribute,XAmazonApiGatewayAuthOptions,IXAmazonApiGatewayAuthOptions>(_options.AuthOptions);
         }
     }
 }

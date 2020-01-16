@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Interfaces;
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
 {
-    public interface IXAmazonApiGatewayOperationOptions
+    public interface IXAmazonApiGatewayIntegrationOptions
     {
         /// <summary>
         /// Specifies how a request payload of unmapped content type is passed through the integration request without modification. Supported values are when_no_templates, when_no_match, and never.
@@ -77,7 +77,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         string Responses { get; set; }
     }
 
-    public class XAmazonApiGatewayIntegrationOptions : AbstractExtensionOptions, IXAmazonApiGatewayOperationOptions
+    public class XAmazonApiGatewayIntegrationOptions : AbstractExtensionOptions, IXAmazonApiGatewayIntegrationOptions
     {
         private const string IntegrationRootKey = "x-amazon-apigateway-integration";
         private const string UriKey = "uri";

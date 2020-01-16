@@ -26,9 +26,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 );
         }
 
-        public static void AddXAmazonApiGatewayOperationAnnotations(this SwaggerGenOptions swaggerGenOptions, Action<XAmazonApiGatewayIntegrationOptions> setupAction)
+        public static void AddXAmazonApiGatewayOperationAnnotations(this SwaggerGenOptions swaggerGenOptions, Action<XAmazonApiGatewayOperationOptions> setupAction)
         {
-            var options = new XAmazonApiGatewayIntegrationOptions();
+            var options = new XAmazonApiGatewayOperationOptions();
 
             setupAction.Invoke(options);
 

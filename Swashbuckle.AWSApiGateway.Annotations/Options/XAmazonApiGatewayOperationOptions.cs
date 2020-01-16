@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.OpenApi.Interfaces;
-using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
 {
-    public class XAmazonApiGatewayOperationOptions : AbstractExtensionOptions
+    public class XAmazonApiGatewayOperationOptions
     {
-        private readonly XAmazonApiGatewayIntegrationOptions _integrationOptions = new XAmazonApiGatewayIntegrationOptions();
-        private readonly XAmazonApiGatewayAuthOptions _authOptions = new XAmazonApiGatewayAuthOptions();
+        public XAmazonApiGatewayIntegrationOptions IntegrationOptions { get; } = new XAmazonApiGatewayIntegrationOptions();
+        public XAmazonApiGatewayAuthOptions AuthOptions { get; } = new XAmazonApiGatewayAuthOptions();
 
+        /// <summary>
+        /// Specifies details of the backend integration used for this method. This extension is an extended property of the OpenAPI Operation object. The result is an API Gateway integration object.
+        /// </summary>
+        /// <param name="setupAction"></param>
         public void WithIntegration(Action<XAmazonApiGatewayIntegrationOptions> setupAction)
         {
-            setupAction.Invoke(_integrationOptions);
+            setupAction.Invoke(IntegrationOptions);
         }
 
+        /// <summary>
+        /// Defines an authentication type to be applied for authentication of method invocations in API Gateway.
+        /// </summary>
+        /// <param name="setupAction"></param>
         public void WithAuth(Action<XAmazonApiGatewayAuthOptions> setupAction)
         {
-            setupAction.Invoke(_authOptions);
-        }
-
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
-        {
-            return
-                _integrationOptions
-                    .ToDictionary()
-                    .Union(_authOptions.ToDictionary());
+            setupAction.Invoke(AuthOptions);
         }
     }
 }

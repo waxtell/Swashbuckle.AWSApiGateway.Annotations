@@ -6,7 +6,12 @@ using Swashbuckle.AWSApiGateway.Annotations.Enums;
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
 {
-    public class XAmazonApiGatewayAuthOptions : AbstractExtensionOptions
+    public interface IXAmazonApiGatewayAuthOptions
+    {
+        AuthType AuthType { get; set; }
+    }
+
+    public class XAmazonApiGatewayAuthOptions : AbstractExtensionOptions, IXAmazonApiGatewayAuthOptions
     {
         private const string TypeKey = "type";
         private const string AuthRootKey = "x-amazon-apigateway-auth";
