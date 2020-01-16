@@ -15,5 +15,5 @@ jobs:
         uses: rohith/publish-nuget@v1.2.0
         with:
            project_dir: Swashbuckle.AWSApiGateway.Annotations
-           tag_format: [*]
+           tag_format: v*
            nuget_key: ${{secrets.NUGET_API_KEY}}
