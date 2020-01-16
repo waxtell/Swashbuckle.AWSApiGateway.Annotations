@@ -58,20 +58,8 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
                     if (!string.IsNullOrEmpty(instance.BaseUri))
                     {
-                        if (string.IsNullOrEmpty(instance.Uri))
-                        {
-                            instance.Uri = new Uri(new Uri(instance.BaseUri), context.ApiDescription.RelativePath)
-                                            .ToString();
-                        }
-                        else
-                        {
-                            var uri = new Uri(instance.Uri);
-
-                            if (!uri.IsAbsoluteUri)
-                            {
-                                instance.Uri = new Uri(new Uri(instance.BaseUri), uri).ToString();
-                            }
-                        }
+                        instance.Uri = new Uri(new Uri(instance.BaseUri), context.ApiDescription.RelativePath)
+                                        .ToString();
                     }
                 }
             );
