@@ -8,8 +8,8 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 {
     public class XAmazonApiGatewayOptions : AbstractExtensionOptions
     {
-        private readonly XAmazonApiGatewayKeySourceOptions _apiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions();
-        private readonly XAmazonApiGatewayCORSOptions _corsOptions = new XAmazonApiGatewayCORSOptions();
+        private XAmazonApiGatewayKeySourceOptions _apiKeySourceOptions;
+        private XAmazonApiGatewayCORSOptions _corsOptions;
 
         /// <summary>
         /// Specify the source to receive an API key to throttle API methods that require a key.
@@ -17,6 +17,8 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <param name="setupAction"></param>
         public void WithKeySource(Action<XAmazonApiGatewayKeySourceOptions> setupAction)
         {
+            _apiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions();
+
             setupAction.Invoke(_apiKeySourceOptions);
         }
 
@@ -26,15 +28,16 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <param name="setupAction"></param>
         public void WithCors(Action<XAmazonApiGatewayCORSOptions> setupAction)
         {
+            _corsOptions = new XAmazonApiGatewayCORSOptions();
+
             setupAction.Invoke(_corsOptions);
         }
 
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
         {
             return
-                _apiKeySourceOptions
-                    .ToDictionary()
-                    .Union(_corsOptions.ToDictionary());
+                (_apiKeySourceOptions?.ToDictionary() ?? new Dictionary<string,IOpenApiExtension>())
+                    .Union(_corsOptions?.ToDictionary());
         }
     }
 }
