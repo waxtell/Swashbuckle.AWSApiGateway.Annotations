@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Provides programmatic support for including AWS API Gateway custom annotations at OAS "build" time.</Description>
     <Authors>Will Axtell</Authors>
     <PackageTags>OAS AWS Gateway x-amazon-apigateway</PackageTags>
-    <PackageReleaseNotes>1.0.1- now supports key source, cors, integration and auth annotations</PackageReleaseNotes>
-    <Version>1.0.1</Version>
+    <PackageReleaseNotes>1.0.2- only include document level annotations that are explicitly initialized
+1.0.1- now supports key source, cors, integration and auth annotations</PackageReleaseNotes>
+    <Version>1.0.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
