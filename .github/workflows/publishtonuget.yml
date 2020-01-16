@@ -8,8 +8,8 @@ jobs:
     name: publish to nuget
     runs-on: ubuntu-latest
     steps:
-      # Checkout
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       # Publish
       - name: Publish NuGet
