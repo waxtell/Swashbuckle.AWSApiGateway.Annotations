@@ -107,6 +107,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         public string RequestParameters { get; set; }
         public string RequestTemplates { get; set; }
         public string Responses { get; set; }
+        public string BaseUri { get; set; }
 
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
         {

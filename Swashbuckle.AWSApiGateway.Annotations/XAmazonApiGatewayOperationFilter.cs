@@ -1,6 +1,8 @@
 ﻿using System;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
@@ -18,7 +20,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            void Apply<TAttribute, TOptions, TIOptions>(TIOptions source) 
+            void Apply<TAttribute, TOptions, TIOptions>(TIOptions source, Action<TOptions> setupAction) 
                 where TAttribute : Attribute, TIOptions
                 where TOptions : AbstractExtensionOptions, TIOptions
             {
@@ -27,8 +29,8 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                                     ?.ToList();
 
                 var optionsClone = Activator.CreateInstance<TOptions>();
-
                 optionsClone.Merge(source);
+                setupAction.Invoke(optionsClone);
 
                 if (attributes != null && attributes.Any())
                 {
@@ -44,8 +46,41 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 }
             }
 
-            Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>(_options.IntegrationOptions);
-            Apply<XAmazonApiGatewayAuthAttribute,XAmazonApiGatewayAuthOptions,IXAmazonApiGatewayAuthOptions>(_options.AuthOptions);
+            Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>
+            (
+                _options.IntegrationOptions,
+                instance =>
+                {
+                    if (string.IsNullOrEmpty(instance.HttpMethod))
+                    {
+                        instance.HttpMethod = context.ApiDescription.HttpMethod;
+                    }
+
+                    if (!string.IsNullOrEmpty(instance.BaseUri))
+                    {
+                        if (string.IsNullOrEmpty(instance.Uri))
+                        {
+                            instance.Uri = new Uri(new Uri(instance.BaseUri), context.ApiDescription.RelativePath)
+                                            .ToString();
+                        }
+                        else
+                        {
+                            var uri = new Uri(instance.Uri);
+
+                            if (!uri.IsAbsoluteUri)
+                            {
+                                instance.Uri = new Uri(new Uri(instance.BaseUri), uri).ToString();
+                            }
+                        }
+                    }
+                }
+            );
+
+            Apply<XAmazonApiGatewayAuthAttribute,XAmazonApiGatewayAuthOptions,IXAmazonApiGatewayAuthOptions>
+            (
+                _options.AuthOptions,
+                instance => { }
+            );
         }
     }
 }
