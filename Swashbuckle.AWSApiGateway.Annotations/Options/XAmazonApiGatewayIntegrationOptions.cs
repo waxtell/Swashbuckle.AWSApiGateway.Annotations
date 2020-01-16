@@ -107,6 +107,10 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         public string RequestParameters { get; set; }
         public string RequestTemplates { get; set; }
         public string Responses { get; set; }
+        /// <summary>
+        /// The BaseUri will be used to generate the Uri value for operations where a Uri value is not explicitly provided.
+        /// </summary>
+        public string BaseUri { get; set; }
 
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
         {

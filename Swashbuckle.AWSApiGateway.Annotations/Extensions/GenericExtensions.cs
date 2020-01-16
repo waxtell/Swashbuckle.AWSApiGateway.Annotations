@@ -26,7 +26,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
             foreach (var prop in properties)
             {
                 var value = prop.GetValue(source, null);
-                prop.SetValue(target, value, null);
+
+                if (value != null)
+                {
+                    prop.SetValue(target, value, null);
+                }
             }
         }
 
