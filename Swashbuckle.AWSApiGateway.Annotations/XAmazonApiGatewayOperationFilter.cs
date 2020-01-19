@@ -1,8 +1,6 @@
 ﻿using System;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
