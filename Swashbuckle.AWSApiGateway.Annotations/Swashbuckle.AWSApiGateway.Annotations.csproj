@@ -5,10 +5,14 @@
     <Description>Provides programmatic support for including AWS API Gateway custom annotations at OAS "build" time.</Description>
     <Authors>Will Axtell</Authors>
     <PackageTags>OAS AWS Gateway x-amazon-apigateway</PackageTags>
-    <PackageReleaseNotes>1.0.3- supply default values for operation values (HttpMethod and Uri)
+    <PackageReleaseNotes>1.0.4- update package metadata
+1.0.3- supply default values for operation values (HttpMethod and Uri)
 1.0.2- only include document level annotations that are explicitly initialized
 1.0.1- now supports key source, cors, integration and auth annotations</PackageReleaseNotes>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
+    <PackageProjectUrl>https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
