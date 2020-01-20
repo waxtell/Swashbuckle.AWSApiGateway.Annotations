@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,12 @@ namespace SampleApp9000
                                 {
                                     kso.ApiKeySource = ApiKeySource.Header;
                                 }
+                            );
+
+                        options
+                            .WithBinaryMediaTypes
+                            (
+                                bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}    
                             );
                     }
                 );
