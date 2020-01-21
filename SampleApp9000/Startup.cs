@@ -99,11 +99,14 @@ namespace SampleApp9000
                         {
                             swagger.Servers = new List<OpenApiServer>
                             {
-                                new OpenApiServer {Url = $"{httpReq.Scheme}://{httpReq.Host.Value}"}
-                                    .WithEndpointConfiguration
-                                    (
-                                        eco => eco.Types = new []{ "EDGE" }
-                                    )
+                                new OpenApiServer
+                                {
+                                    Url = $"https://www.yourcustomdomain.com"
+                                }
+                                .AsRegionalEndpoint()
+                                //.AsEdgeEndpoint("yourcustomdomain.com")
+                                //.AsPrivateEndpoint("vpcid1", "vpcid2", "vpcid3")
+                                //.AsRegionalEndpoint("yourcustomdomain.com")
                             };
                         });
 
