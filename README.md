@@ -61,3 +61,27 @@ Setting values for actions:
         public IEnumerable<WeatherForecast> Get()
         {
 ```
+
+Configuring your endpoint:
+
+```csharp
+            app
+                .UseSwagger
+                (
+                    c =>
+                    {
+                        c.PreSerializeFilters.Add((swagger, httpReq) =>
+                        {
+                            swagger.Servers = new List<OpenApiServer>
+                            {
+                                new OpenApiServer
+                                {
+                                    Url = $"https://www.yourcustomdomain.com"
+                                }
+                                .AsRegionalEndpoint()
+                                //.AsEdgeEndpoint("yourcustomdomain.com")
+                                //.AsPrivateEndpoint("vpcid1", "vpcid2", "vpcid3")
+                                //.AsRegionalEndpoint("yourcustomdomain.com")
+                            };
+                        });
+```

@@ -10,6 +10,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
     {
         private XAmazonApiGatewayKeySourceOptions _apiKeySourceOptions;
         private XAmazonApiGatewayCORSOptions _corsOptions;
+        private XAmazonApiGatewayBinaryMediaTypesOptions _binaryMediaTypesOptions;
 
         /// <summary>
         /// Specify the source to receive an API key to throttle API methods that require a key.
@@ -33,11 +34,20 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             setupAction.Invoke(_corsOptions);
         }
 
+        public void WithBinaryMediaTypes(Action<XAmazonApiGatewayBinaryMediaTypesOptions> setupAction)
+        {
+            _binaryMediaTypesOptions = new XAmazonApiGatewayBinaryMediaTypesOptions();
+
+            setupAction.Invoke(_binaryMediaTypesOptions);
+        }
+
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
         {
             return
                 (_apiKeySourceOptions?.ToDictionary() ?? new Dictionary<string,IOpenApiExtension>())
-                    .Union(_corsOptions?.ToDictionary());
+                    .Union(_corsOptions?.ToDictionary())
+                    .Union(_binaryMediaTypesOptions.ToDictionary())
+                ;
         }
     }
 }
