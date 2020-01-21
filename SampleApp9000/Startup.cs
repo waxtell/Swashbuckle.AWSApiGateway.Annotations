@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations;
+using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 
 namespace SampleApp9000
 {
@@ -88,25 +90,37 @@ namespace SampleApp9000
 
             app.UseAuthorization();
 
-            app.UseSwagger(c =>
-            {
-            });
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.DocumentTitle = "SampleApp9000";
-                c.SwaggerEndpoint("/swagger/sampleapp/swagger.json", "Sample App 9000");
-                c.RoutePrefix = string.Empty;
-            });
-
             app
-                .UseEndpoints
+                .UseSwagger
                 (
-                    endpoints =>
+                    c =>
                     {
-                        endpoints.MapControllers();
+                        c.PreSerializeFilters.Add((swagger, httpReq) =>
+                        {
+                            swagger.Servers = new List<OpenApiServer>
+                            {
+                                new OpenApiServer {Url = $"{httpReq.Scheme}://{httpReq.Host.Value}"}
+                                    .WithEndpointConfiguration
+                                    (
+                                        eco => eco.Types = new []{ "EDGE" }
+                                    )
+                            };
+                        });
+
+                        // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+                        // specifying the Swagger JSON endpoint.
+                        app.UseSwaggerUI(c =>
+                        {
+                            c.DocumentTitle = "SampleApp9000";
+                            c.SwaggerEndpoint("/swagger/sampleapp/swagger.json", "Sample App 9000");
+                            c.RoutePrefix = string.Empty;
+                        });
+
+                        app
+                            .UseEndpoints
+                            (
+                                endpoints => { endpoints.MapControllers(); }
+                            );
                     }
                 );
         }
