@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.OpenApi.Interfaces;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
 
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    public class XAmazonApiGatewayIntegrationAttribute : Attribute, IXAmazonApiGatewayIntegrationOptions
+    public class XAmazonApiGatewayIntegrationAttribute : AbstractTrackingAttribute, IXAmazonApiGatewayIntegrationOptions
     {
         private readonly XAmazonApiGatewayIntegrationOptions _ixAmazonApiGatewayOperationOptionsImplementation = new XAmazonApiGatewayIntegrationOptions();
 
@@ -92,6 +91,13 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             return 
                 _ixAmazonApiGatewayOperationOptionsImplementation
                     .ToDictionary();
+        }
+
+        internal override IEnumerable<string> GetChangedProperties()
+        {
+            return
+                _ixAmazonApiGatewayOperationOptionsImplementation
+                    .GetChangedProperties();
         }
     }
 }

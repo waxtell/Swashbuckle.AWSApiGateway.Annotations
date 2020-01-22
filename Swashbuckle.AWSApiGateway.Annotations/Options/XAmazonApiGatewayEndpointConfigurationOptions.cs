@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Interfaces;
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    public class XAmazonApiGatewayEndpointConfigurationOptions : AbstractExtensionOptions
+    internal class XAmazonApiGatewayEndpointConfigurationOptions : AbstractExtensionOptions
     {
         private const string EndpointConfigurationRootKey = "x-amazon-apigateway-endpoint-configuration";
         private const string TypesKey = "types";

@@ -18,23 +18,22 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            void Apply<TAttribute, TOptions, TIOptions>(TIOptions source, Action<TOptions> setupAction) 
-                where TAttribute : Attribute, TIOptions
+            void Apply<TAttribute, TOptions, TIOptions>(TOptions optionsClone, TOptions source) 
+                where TAttribute : AbstractTrackingAttribute, TIOptions
                 where TOptions : AbstractExtensionOptions, TIOptions
+
             {
                 var attributes = context
                                     .GetControllerAndActionAttributes<TAttribute>()
                                     ?.ToList();
 
-                var optionsClone = Activator.CreateInstance<TOptions>();
                 optionsClone.Merge(source);
-                setupAction.Invoke(optionsClone);
 
                 if (attributes != null && attributes.Any())
                 {
                     foreach (var attribute in attributes)
                     {
-                        optionsClone.Merge<TIOptions>(attribute);
+                        optionsClone.Merge<TOptions,TIOptions,TAttribute>(attribute);
                     }
                 }
 
@@ -44,28 +43,25 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 }
             }
 
+            XAmazonApiGatewayIntegrationOptions CreateDefaultIntegrationOptions(string baseUri)
+            {
+                return new XAmazonApiGatewayIntegrationOptions
+                {
+                    HttpMethod = context.ApiDescription.HttpMethod,
+                    Uri = new Uri(new Uri(baseUri), context.ApiDescription.RelativePath).ToString()
+                };
+            }
+
             Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>
             (
-                _options.IntegrationOptions,
-                instance =>
-                {
-                    if (string.IsNullOrEmpty(instance.HttpMethod))
-                    {
-                        instance.HttpMethod = context.ApiDescription.HttpMethod;
-                    }
-
-                    if (!string.IsNullOrEmpty(instance.BaseUri))
-                    {
-                        instance.Uri = new Uri(new Uri(instance.BaseUri), context.ApiDescription.RelativePath)
-                                        .ToString();
-                    }
-                }
+                CreateDefaultIntegrationOptions(_options.IntegrationOptions.BaseUri),
+                _options.IntegrationOptions
             );
 
             Apply<XAmazonApiGatewayAuthAttribute,XAmazonApiGatewayAuthOptions,IXAmazonApiGatewayAuthOptions>
             (
-                _options.AuthOptions,
-                instance => { }
+                new XAmazonApiGatewayAuthOptions(), 
+                _options.AuthOptions
             );
         }
     }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
+// ReSharper disable UnusedMemberInSuper.Global
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
 {
@@ -94,19 +96,98 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         private const string RequestTemplatesKey = "requestTemplates";
         private const string ResponsesKey = "responses";
 
-        public PassthroughBehavior PassthroughBehavior { get; set; } = PassthroughBehavior.UNDEFINED;
-        public string HttpMethod { get; set; }
-        public ContentHandling ContentHandling { get; set; } = ContentHandling.UNDEFINED;
-        public ConnectionType ConnectionType { get; set; } = ConnectionType.INTERNET;
-        public string ConnectionId { get; set; }
-        public string Credentials { get; set; }
-        public string CacheNamespace { get; set; }
-        public int TimeoutInMillis { get; set; } = 29000;
-        public IntegrationType Type { get; set; } = IntegrationType.aws;
-        public string Uri { get; set; }
-        public string RequestParameters { get; set; }
-        public string RequestTemplates { get; set; }
-        public string Responses { get; set; }
+        private PassthroughBehavior _passthroughBehavior;
+        private string _httpMethod;
+        private ContentHandling _contentHandling;
+        private ConnectionType _connectionType = ConnectionType.INTERNET;
+        private string _connectionId;
+        private string _credentials;
+        private string _cacheNamespace;
+        private int _timeoutInMillis = 29000;
+        private IntegrationType _type = IntegrationType.aws;
+        private string _uri;
+        private string _requestParameters;
+        private string _requestTemplates;
+        private string _responses;
+
+        public PassthroughBehavior PassthroughBehavior
+        {
+            get => _passthroughBehavior;
+            set { _passthroughBehavior = value; OnPropertyChanged(); }
+        }
+
+        public string HttpMethod
+        {
+            get => _httpMethod;
+            set { _httpMethod = value; OnPropertyChanged(); }
+        }
+
+        public ContentHandling ContentHandling
+        {
+            get => _contentHandling;
+            set { _contentHandling = value; OnPropertyChanged(); }
+        }
+
+        public ConnectionType ConnectionType
+        {
+            get => _connectionType;
+            set { _connectionType = value; OnPropertyChanged(); }
+        }
+
+        public string ConnectionId
+        {
+            get => _connectionId;
+            set { _connectionId = value; OnPropertyChanged(); }
+        }
+
+        public string Credentials
+        {
+            get => _credentials;
+            set { _credentials = value; OnPropertyChanged(); }
+        }
+
+        public string CacheNamespace
+        {
+            get => _cacheNamespace;
+            set { _cacheNamespace = value; OnPropertyChanged(); }
+        }
+
+        public int TimeoutInMillis
+        {
+            get => _timeoutInMillis;
+            set { _timeoutInMillis = value; OnPropertyChanged(); }
+        }
+
+        public IntegrationType Type
+        {
+            get => _type;
+            set { _type = value; OnPropertyChanged(); }
+        }
+
+        public string Uri
+        {
+            get => _uri;
+            set { _uri = value; OnPropertyChanged(); }
+        }
+
+        public string RequestParameters
+        {
+            get => _requestParameters;
+            set { _requestParameters = value; OnPropertyChanged(); }
+        }
+
+        public string RequestTemplates
+        {
+            get => _requestTemplates;
+            set { _requestTemplates = value; OnPropertyChanged(); }
+        }
+
+        public string Responses
+        {
+            get => _responses;
+            set { _responses = value; OnPropertyChanged(); }
+        }
+
         /// <summary>
         /// The BaseUri will be used to generate the Uri value for operations where a Uri value is not explicitly provided.
         /// </summary>
@@ -114,63 +195,71 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
 
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
         {
-            var children = new OpenApiObject
-            {
-                [TimeoutInMillisKey] = new OpenApiInteger(TimeoutInMillis),
-                [ConnectionTypeKey] = new OpenApiString(Enum.GetName(typeof(ConnectionType), ConnectionType))
-            };
+            var changedProperties = GetChangedProperties().ToList();
 
-            if (Type != IntegrationType.UNDEFINED)
+            var children = new OpenApiObject();
+
+            if (changedProperties.Contains(nameof(TimeoutInMillis)))
+            {
+                children[TimeoutInMillisKey] = new OpenApiInteger(TimeoutInMillis);
+            }
+
+            if (changedProperties.Contains(nameof(ConnectionType)))
+            {
+                children[ConnectionTypeKey] = new OpenApiString(Enum.GetName(typeof(ConnectionType), ConnectionType));
+            }
+
+            if (changedProperties.Contains(nameof(Type)))
             {
                 children[TypeKey] = new OpenApiString(Enum.GetName(typeof(IntegrationType), Type));
             }
 
-            if (!string.IsNullOrEmpty(Uri))
+            if (changedProperties.Contains(nameof(Uri)))
             {
                 children[UriKey] = new OpenApiString(Uri);
             }
 
-            if (!string.IsNullOrEmpty(ConnectionId))
+            if (changedProperties.Contains(nameof(ConnectionId)))
             {
                 children[ConnectionIdKey] = new OpenApiString(ConnectionId);
             }
 
-            if (!string.IsNullOrEmpty(HttpMethod))
+            if (changedProperties.Contains(nameof(HttpMethod)))
             {
                 children[HttpMethodKey] = new OpenApiString(HttpMethod);
             }
 
-            if (!string.IsNullOrEmpty(Credentials))
+            if (changedProperties.Contains(nameof(Credentials)))
             {
                 children[CredentialsKey] = new OpenApiString(Credentials);
             }
 
-            if (!string.IsNullOrEmpty(CacheNamespace))
+            if (changedProperties.Contains(nameof(CacheNamespace)))
             {
                 children[CacheNamespaceKey] = new OpenApiString(CacheNamespace);
             }
 
-            if (!string.IsNullOrEmpty(RequestParameters))
+            if (changedProperties.Contains(nameof(RequestParameters)))
             {
                 children[RequestParametersKey] = new OpenApiString(RequestParameters);
             }
 
-            if (!string.IsNullOrEmpty(RequestTemplates))
+            if (changedProperties.Contains(nameof(RequestTemplates)))
             {
                 children[RequestTemplatesKey] = new OpenApiString(RequestTemplates);
             }
 
-            if (!string.IsNullOrEmpty(Responses))
+            if (changedProperties.Contains(nameof(Responses)))
             {
                 children[ResponsesKey] = new OpenApiString(Responses);
             }
 
-            if (ContentHandling != ContentHandling.UNDEFINED)
+            if (changedProperties.Contains(nameof(ContentHandling)))
             {
                 children[ContentHandlingKey] = new OpenApiString(Enum.GetName(typeof(ContentHandling), ContentHandling));
             }
 
-            if (PassthroughBehavior != PassthroughBehavior.UNDEFINED)
+            if (changedProperties.Contains(nameof(PassthroughBehavior)))
             {
                 children[PassthroughBehaviorKey] = new OpenApiString(Enum.GetName(typeof(PassthroughBehavior), PassthroughBehavior));
             }
