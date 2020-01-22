@@ -46,7 +46,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             return
                 (_apiKeySourceOptions?.ToDictionary() ?? new Dictionary<string,IOpenApiExtension>())
                     .Union(_corsOptions?.ToDictionary())
-                    .Union(_binaryMediaTypesOptions.ToDictionary())
+                    .Union(_binaryMediaTypesOptions?.ToDictionary())
                 ;
         }
     }
