@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations;
+using Swashbuckle.AWSApiGateway.Annotations.Enums;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 
 namespace SampleApp9000
@@ -49,9 +50,7 @@ namespace SampleApp9000
                                 {
                                     kso.ApiKeySource = ApiKeySource.Header;
                                 }
-                            );
-
-                        options
+                            )
                             .WithBinaryMediaTypes
                             (
                                 bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}    
@@ -63,14 +62,19 @@ namespace SampleApp9000
                 (
                     op =>
                     {
-                        op.WithIntegration
-                        (
-                        intOpt =>
-                            {
-                                intOpt.Type = IntegrationType.http_proxy;
-                                intOpt.BaseUri = "https://your.domain.com";
-                            }
-                        );
+                        op
+                            .WithIntegration
+                            (
+                                intOpt =>
+                                {
+                                    intOpt.Type = IntegrationType.http_proxy;
+                                    intOpt.BaseUri = "https://your.domain.com";
+                                }
+                            )
+                            .WithAuth
+                            (
+                                authOpt => authOpt.AuthType = AuthType.NONE
+                            );
                     }
                 );
             });

@@ -16,29 +16,35 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// Specify the source to receive an API key to throttle API methods that require a key.
         /// </summary>
         /// <param name="setupAction"></param>
-        public void WithKeySource(Action<XAmazonApiGatewayKeySourceOptions> setupAction)
+        public XAmazonApiGatewayOptions WithKeySource(Action<XAmazonApiGatewayKeySourceOptions> setupAction)
         {
             _apiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions();
 
             setupAction.Invoke(_apiKeySourceOptions);
+
+            return this;
         }
 
         /// <summary>
         /// Specifies the cross-origin resource sharing (CORS) configuration for an HTTP API. The extension applies to the root-level OpenAPI structure.
         /// </summary>
         /// <param name="setupAction"></param>
-        public void WithCors(Action<XAmazonApiGatewayCORSOptions> setupAction)
+        public XAmazonApiGatewayOptions WithCors(Action<XAmazonApiGatewayCORSOptions> setupAction)
         {
             _corsOptions = new XAmazonApiGatewayCORSOptions();
 
             setupAction.Invoke(_corsOptions);
+
+            return this;
         }
 
-        public void WithBinaryMediaTypes(Action<XAmazonApiGatewayBinaryMediaTypesOptions> setupAction)
+        public XAmazonApiGatewayOptions WithBinaryMediaTypes(Action<XAmazonApiGatewayBinaryMediaTypesOptions> setupAction)
         {
             _binaryMediaTypesOptions = new XAmazonApiGatewayBinaryMediaTypesOptions();
 
             setupAction.Invoke(_binaryMediaTypesOptions);
+
+            return this;
         }
 
         internal override IDictionary<string, IOpenApiExtension> ToDictionary()
