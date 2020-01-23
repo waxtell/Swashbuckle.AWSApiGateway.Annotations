@@ -5,7 +5,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
     internal static class GenericExtensions
     {
         public static void Merge<T>(this T target, T source) where T 
-            : AbstractExtensionOptions
+            : AbstractOptions
         {
             var t = typeof(T);
             var changedProperties = source

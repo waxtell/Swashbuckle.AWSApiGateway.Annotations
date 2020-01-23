@@ -20,7 +20,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         {
             void Apply<TAttribute, TOptions, TIOptions>(TOptions optionsClone, TOptions source) 
                 where TAttribute : AbstractTrackingAttribute, TIOptions
-                where TOptions : AbstractExtensionOptions, TIOptions
+                where TOptions : AbstractOptions, TIOptions
 
             {
                 var attributes = context

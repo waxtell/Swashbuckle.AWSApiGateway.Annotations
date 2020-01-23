@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
 using Swashbuckle.AWSApiGateway.Annotations.Enums;
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
@@ -12,7 +11,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         AuthType AuthType { get; set; }
     }
 
-    public class XAmazonApiGatewayAuthOptions : AbstractExtensionOptions, IXAmazonApiGatewayAuthOptions
+    public class XAmazonApiGatewayAuthOptions : AbstractOptions, IXAmazonApiGatewayAuthOptions
     {
         private AuthType _authType;
         private const string TypeKey = "type";
@@ -24,9 +23,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
             set { _authType = value; OnPropertyChanged(); }
         }
 
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
-            var result = new Dictionary<string, IOpenApiExtension>();
+            var result = new Dictionary<string, IOpenApiAny>();
 
             if (GetChangedProperties().Contains(nameof(AuthType)))
             {

@@ -2,11 +2,6 @@
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
 {
-    public abstract class AbstractItem
-    {
-        internal abstract (string, IOpenApiAny) ToDictionaryItem();
-    }
-
     public class RequestValidator : AbstractItem
     {
         private const string ValidateRequestBodyKey = "validateRequestBody";

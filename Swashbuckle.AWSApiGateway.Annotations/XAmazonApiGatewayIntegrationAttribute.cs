@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.OpenApi.Interfaces;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
 
 namespace Swashbuckle.AWSApiGateway.Annotations
@@ -84,13 +83,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         {
             get => _ixAmazonApiGatewayOperationOptionsImplementation.Responses;
             set => _ixAmazonApiGatewayOperationOptionsImplementation.Responses = value;
-        }
-
-        public IDictionary<string, IOpenApiExtension> ToDictionary()
-        {
-            return 
-                _ixAmazonApiGatewayOperationOptionsImplementation
-                    .ToDictionary();
         }
 
         internal override IEnumerable<string> GetChangedProperties()

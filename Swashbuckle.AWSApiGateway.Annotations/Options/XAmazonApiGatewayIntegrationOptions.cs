@@ -79,7 +79,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         string Responses { get; set; }
     }
 
-    public class XAmazonApiGatewayIntegrationOptions : AbstractExtensionOptions, IXAmazonApiGatewayIntegrationOptions
+    public class XAmazonApiGatewayIntegrationOptions : AbstractOptions, IXAmazonApiGatewayIntegrationOptions
     {
         private const string IntegrationRootKey = "x-amazon-apigateway-integration";
         private const string UriKey = "uri";
@@ -193,7 +193,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         /// </summary>
         public string BaseUri { get; set; }
 
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             var changedProperties = GetChangedProperties().ToList();
 
@@ -264,7 +264,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
                 children[PassthroughBehaviorKey] = new OpenApiString(Enum.GetName(typeof(PassthroughBehavior), PassthroughBehavior));
             }
 
-            return new Dictionary<string, IOpenApiExtension>()
+            return new Dictionary<string, IOpenApiAny>()
             {
                 { IntegrationRootKey, children }
             };

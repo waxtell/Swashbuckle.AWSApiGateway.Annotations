@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.OpenApi.Interfaces;
+using Microsoft.OpenApi.Any;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    public class XAmazonApiGatewayOptions : AbstractExtensionOptions
+    public class XAmazonApiGatewayOptions : AbstractOptions
     {
         private XAmazonApiGatewayKeySourceOptions _apiKeySourceOptions;
         private XAmazonApiGatewayCORSOptions _corsOptions;
@@ -57,10 +57,10 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             return this;
         }
 
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             return
-                (_apiKeySourceOptions?.ToDictionary() ?? new Dictionary<string,IOpenApiExtension>())
+                (_apiKeySourceOptions?.ToDictionary() ?? new Dictionary<string, IOpenApiAny>())
                     .Union(_corsOptions?.ToDictionary())
                     .Union(_binaryMediaTypesOptions?.ToDictionary())
                     .Union(_amazonApiGatewayRequestValidators?.ToDictionary())
