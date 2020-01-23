@@ -9,15 +9,20 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 {
     public class XAmazonApiGatewayBinaryMediaTypesOptions : AbstractOptions
     {
+        private IEnumerable<string> _binaryMediaTypes;
         private const string BinaryMediaTypesKey = "x-amazon-apigateway-binary-media-types";
 
-        public IEnumerable<string> BinaryMediaTypes { get; set; }
+        public IEnumerable<string> BinaryMediaTypes
+        {
+            get => _binaryMediaTypes;
+            set { _binaryMediaTypes = value; OnPropertyChanged(); }
+        }
 
         internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             var result = new Dictionary<string, IOpenApiAny>();
 
-            if (BinaryMediaTypes != null && BinaryMediaTypes.Any())
+            if (HasPropertyChanged(nameof(BinaryMediaTypes)))
             {
                 var binaryTypes = new OpenApiArray();
                 binaryTypes.AddRange(BinaryMediaTypes.Select(x => new OpenApiString(x)));

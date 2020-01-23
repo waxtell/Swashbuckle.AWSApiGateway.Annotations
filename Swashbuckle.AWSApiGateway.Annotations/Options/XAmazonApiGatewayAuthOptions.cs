@@ -13,9 +13,10 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
 
     public class XAmazonApiGatewayAuthOptions : AbstractOptions, IXAmazonApiGatewayAuthOptions
     {
-        private AuthType _authType;
         private const string TypeKey = "type";
         private const string AuthRootKey = "x-amazon-apigateway-auth";
+
+        private AuthType _authType;
 
         public AuthType AuthType
         {
@@ -27,7 +28,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         {
             var result = new Dictionary<string, IOpenApiAny>();
 
-            if (GetChangedProperties().Contains(nameof(AuthType)))
+            if (HasPropertyChanged(nameof(AuthType)))
             {
                 var children = new OpenApiObject
                 {

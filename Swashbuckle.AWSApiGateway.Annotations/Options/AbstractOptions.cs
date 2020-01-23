@@ -23,5 +23,12 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                     .Where(propertyName => !string.IsNullOrWhiteSpace(propertyName))
                     .Distinct();
         }
+
+        internal bool HasPropertyChanged(string propertyName)
+        {
+            return
+                _changedProperties
+                    .Contains(propertyName);
+        }
     }
 }

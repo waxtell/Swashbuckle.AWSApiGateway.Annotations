@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
 // ReSharper disable UnusedMemberInSuper.Global
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Options
@@ -99,12 +97,12 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         private PassthroughBehavior _passthroughBehavior;
         private string _httpMethod;
         private ContentHandling _contentHandling;
-        private ConnectionType _connectionType = ConnectionType.INTERNET;
+        private ConnectionType _connectionType;
         private string _connectionId;
         private string _credentials;
         private string _cacheNamespace;
-        private int _timeoutInMillis = 29000;
-        private IntegrationType _type = IntegrationType.aws;
+        private int _timeoutInMillis;
+        private IntegrationType _type;
         private string _uri;
         private string _requestParameters;
         private string _requestTemplates;
@@ -195,71 +193,69 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
 
         internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
-            var changedProperties = GetChangedProperties().ToList();
-
             var children = new OpenApiObject();
 
-            if (changedProperties.Contains(nameof(TimeoutInMillis)))
+            if (HasPropertyChanged(nameof(TimeoutInMillis)))
             {
                 children[TimeoutInMillisKey] = new OpenApiInteger(TimeoutInMillis);
             }
 
-            if (changedProperties.Contains(nameof(ConnectionType)))
+            if (HasPropertyChanged(nameof(ConnectionType)))
             {
                 children[ConnectionTypeKey] = new OpenApiString(Enum.GetName(typeof(ConnectionType), ConnectionType));
             }
 
-            if (changedProperties.Contains(nameof(Type)))
+            if (HasPropertyChanged(nameof(Type)))
             {
                 children[TypeKey] = new OpenApiString(Enum.GetName(typeof(IntegrationType), Type));
             }
 
-            if (changedProperties.Contains(nameof(Uri)))
+            if (HasPropertyChanged(nameof(Uri)))
             {
                 children[UriKey] = new OpenApiString(Uri);
             }
 
-            if (changedProperties.Contains(nameof(ConnectionId)))
+            if (HasPropertyChanged(nameof(ConnectionId)))
             {
                 children[ConnectionIdKey] = new OpenApiString(ConnectionId);
             }
 
-            if (changedProperties.Contains(nameof(HttpMethod)))
+            if (HasPropertyChanged(nameof(HttpMethod)))
             {
                 children[HttpMethodKey] = new OpenApiString(HttpMethod);
             }
 
-            if (changedProperties.Contains(nameof(Credentials)))
+            if (HasPropertyChanged(nameof(Credentials)))
             {
                 children[CredentialsKey] = new OpenApiString(Credentials);
             }
 
-            if (changedProperties.Contains(nameof(CacheNamespace)))
+            if (HasPropertyChanged(nameof(CacheNamespace)))
             {
                 children[CacheNamespaceKey] = new OpenApiString(CacheNamespace);
             }
 
-            if (changedProperties.Contains(nameof(RequestParameters)))
+            if (HasPropertyChanged(nameof(RequestParameters)))
             {
                 children[RequestParametersKey] = new OpenApiString(RequestParameters);
             }
 
-            if (changedProperties.Contains(nameof(RequestTemplates)))
+            if (HasPropertyChanged(nameof(RequestTemplates)))
             {
                 children[RequestTemplatesKey] = new OpenApiString(RequestTemplates);
             }
 
-            if (changedProperties.Contains(nameof(Responses)))
+            if (HasPropertyChanged(nameof(Responses)))
             {
                 children[ResponsesKey] = new OpenApiString(Responses);
             }
 
-            if (changedProperties.Contains(nameof(ContentHandling)))
+            if (HasPropertyChanged(nameof(ContentHandling)))
             {
                 children[ContentHandlingKey] = new OpenApiString(Enum.GetName(typeof(ContentHandling), ContentHandling));
             }
 
-            if (changedProperties.Contains(nameof(PassthroughBehavior)))
+            if (HasPropertyChanged(nameof(PassthroughBehavior)))
             {
                 children[PassthroughBehaviorKey] = new OpenApiString(Enum.GetName(typeof(PassthroughBehavior), PassthroughBehavior));
             }
