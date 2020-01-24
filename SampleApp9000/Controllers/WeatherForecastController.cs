@@ -26,6 +26,7 @@ namespace SampleApp9000.Controllers
 
         [HttpGet]
         [XAmazonApiGatewayIntegration(ConnectionType = ConnectionType.INTERNET)]
+        [XAmazonApiGatewayRequestValidator(RequestValidator = "params-only")]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations;
 using Swashbuckle.AWSApiGateway.Annotations.Enums;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
+using Swashbuckle.AWSApiGateway.Annotations.Options;
 
 namespace SampleApp9000
 {
@@ -54,7 +55,24 @@ namespace SampleApp9000
                             .WithBinaryMediaTypes
                             (
                                 bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}    
-                            );
+                            )
+                            .WithRequestValidators
+                            (
+                                rv => rv.RequestValidators = new []
+                                {
+                                    new RequestValidator("basic")
+                                    {
+                                        ValidateRequestParameters = true,
+                                        ValidateRequestBody = true
+                                    },
+                                    new RequestValidator("params-only")
+                                    {
+                                        ValidateRequestBody = false,
+                                        ValidateRequestParameters = true
+                                    }
+                                }
+                            )
+                            .WithRequestValidator(rvo => rvo.RequestValidator = "basic");
                     }
                 );
 
@@ -116,11 +134,11 @@ namespace SampleApp9000
 
                         // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
                         // specifying the Swagger JSON endpoint.
-                        app.UseSwaggerUI(c =>
+                        app.UseSwaggerUI(x =>
                         {
-                            c.DocumentTitle = "SampleApp9000";
-                            c.SwaggerEndpoint("/swagger/sampleapp/swagger.json", "Sample App 9000");
-                            c.RoutePrefix = string.Empty;
+                            x.DocumentTitle = "SampleApp9000";
+                            x.SwaggerEndpoint("/swagger/sampleapp/swagger.json", "Sample App 9000");
+                            x.RoutePrefix = string.Empty;
                         });
 
                         app

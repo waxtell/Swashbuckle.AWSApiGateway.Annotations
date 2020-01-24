@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
+
 // ReSharper disable InconsistentNaming
 
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    internal class XAmazonApiGatewayEndpointConfigurationOptions : AbstractExtensionOptions
+    internal class XAmazonApiGatewayEndpointConfigurationOptions : AbstractOptions
     {
         private const string EndpointConfigurationRootKey = "x-amazon-apigateway-endpoint-configuration";
         private const string TypesKey = "types";
@@ -25,7 +25,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// </summary>
         public IEnumerable<string> Types { get; set; }
 
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             var children = new OpenApiObject();
 
@@ -45,7 +45,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 children[VpcEndpointIdsKey] = vpcIds;
             }
 
-            return new Dictionary<string, IOpenApiExtension>()
+            return new Dictionary<string, IOpenApiAny>()
             {
                 { EndpointConfigurationRootKey, children }
             };
