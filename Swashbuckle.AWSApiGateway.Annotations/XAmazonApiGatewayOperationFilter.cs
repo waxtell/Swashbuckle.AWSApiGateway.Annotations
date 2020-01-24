@@ -63,6 +63,12 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 new XAmazonApiGatewayAuthOptions(), 
                 _options.AuthOptions
             );
+
+            Apply<XAmazonApiGatewayRequestValidatorAttribute, XAmazonApiGatewayRequestValidatorOptions, IXAmazonApiGatewayRequestValidatorOptions>
+            (
+                new XAmazonApiGatewayRequestValidatorOptions(),
+                null
+            );
         }
     }
 }

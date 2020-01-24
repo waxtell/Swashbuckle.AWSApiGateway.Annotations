@@ -64,9 +64,15 @@ namespace SampleApp9000
                                     {
                                         ValidateRequestParameters = true,
                                         ValidateRequestBody = true
+                                    },
+                                    new RequestValidator("params-only")
+                                    {
+                                        ValidateRequestBody = false,
+                                        ValidateRequestParameters = true
                                     }
                                 }
-                            );
+                            )
+                            .WithRequestValidator(rvo => rvo.RequestValidator = "basic");
                     }
                 );
 

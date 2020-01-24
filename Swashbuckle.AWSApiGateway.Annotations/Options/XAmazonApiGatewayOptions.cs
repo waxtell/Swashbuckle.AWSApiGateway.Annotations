@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.OpenApi.Any;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
+using Swashbuckle.AWSApiGateway.Annotations.Options;
 
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
@@ -12,6 +13,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         private XAmazonApiGatewayCORSOptions _corsOptions;
         private XAmazonApiGatewayBinaryMediaTypesOptions _binaryMediaTypesOptions;
         private XAmazonApiGatewayRequestValidators _amazonApiGatewayRequestValidators;
+        private XAmazonApiGatewayRequestValidatorOptions _requestValidatorOptions;
 
         /// <summary>
         /// Specify the source to receive an API key to throttle API methods that require a key.
@@ -57,6 +59,21 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             return this;
         }
 
+        /// <summary>
+        /// Specifies a request validator, by referencing a request_validator_name of the x-amazon-apigateway-request-validators Object map, to enable request validation on the containing API or a method. The value of this extension is a JSON string.
+        /// This extension can be specified at the API level or at the method level.The API-level validator applies to all of the methods unless it is overridden by the method-level validator.
+        /// </summary>
+        /// <param name="setupAction"></param>
+        /// <returns></returns>
+        public XAmazonApiGatewayOptions WithRequestValidator(Action<XAmazonApiGatewayRequestValidatorOptions> setupAction)
+        {
+            _requestValidatorOptions = new XAmazonApiGatewayRequestValidatorOptions();
+
+            setupAction.Invoke(_requestValidatorOptions);
+
+            return this;
+        }
+
         internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             return
@@ -64,6 +81,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                     .Union(_corsOptions?.ToDictionary())
                     .Union(_binaryMediaTypesOptions?.ToDictionary())
                     .Union(_amazonApiGatewayRequestValidators?.ToDictionary())
+                    .Union(_requestValidatorOptions?.ToDictionary())
                 ;
         }
     }

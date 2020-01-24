@@ -7,6 +7,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
         public static void Merge<T>(this T target, T source) where T 
             : AbstractOptions
         {
+            if (source == null)
+            {
+                return;
+            }
+
             var t = typeof(T);
             var changedProperties = source
                                         .GetChangedProperties()
@@ -29,6 +34,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
             where T : TI
             where TAttr: AbstractTrackingAttribute, TI
         {
+            if (source == null)
+            {
+                return;
+            }
+
             var t = typeof(TI);
             var changedProperties = source
                                         .GetChangedProperties()
