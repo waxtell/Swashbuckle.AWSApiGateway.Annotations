@@ -1,23 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
+
 // ReSharper disable CommentTypo
 
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    public class XAmazonApiGatewayBinaryMediaTypesOptions : AbstractExtensionOptions
+    public class XAmazonApiGatewayBinaryMediaTypesOptions : AbstractOptions
     {
+        private IEnumerable<string> _binaryMediaTypes;
         private const string BinaryMediaTypesKey = "x-amazon-apigateway-binary-media-types";
 
-        public IEnumerable<string> BinaryMediaTypes { get; set; }
-
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        public IEnumerable<string> BinaryMediaTypes
         {
-            var result = new Dictionary<string, IOpenApiExtension>();
+            get => _binaryMediaTypes;
+            set { _binaryMediaTypes = value; OnPropertyChanged(); }
+        }
 
-            if (BinaryMediaTypes != null && BinaryMediaTypes.Any())
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
+        {
+            var result = new Dictionary<string, IOpenApiAny>();
+
+            if (HasPropertyChanged(nameof(BinaryMediaTypes)))
             {
                 var binaryTypes = new OpenApiArray();
                 binaryTypes.AddRange(BinaryMediaTypes.Select(x => new OpenApiString(x)));

@@ -19,7 +19,24 @@ Setting document centric configuration:
                                 {
                                     kso.ApiKeySource = ApiKeySource.Header;
                                 }
-                            );
+                            )
+                            .WithRequestValidators
+                            (
+                                rv => rv.RequestValidators = new []
+                                {
+                                    new RequestValidator("basic")
+                                    {
+                                        ValidateRequestParameters = true,
+                                        ValidateRequestBody = true
+                                    },
+                                    new RequestValidator("params-only")
+                                    {
+                                        ValidateRequestBody = false,
+                                        ValidateRequestParameters = true
+                                    }
+                                }
+                            )
+                            .WithRequestValidator(rvo => rvo.RequestValidator = "basic");
                     }
                 );
 ```
@@ -49,6 +66,7 @@ Setting default values for controllers:
     [ApiController]
     [Route("[controller]")]
     [XAmazonApiGatewayIntegration(PassthroughBehavior = PassthroughBehavior.WHEN_NO_MATCH)]
+    [XAmazonApiGatewayRequestValidator(RequestValidator = "params-only")]    
     public class WeatherForecastController : ControllerBase
     {
 ```
@@ -58,6 +76,7 @@ Setting values for actions:
 ```csharp
         [HttpGet]
         [XAmazonApiGatewayIntegration(ConnectionType = ConnectionType.INTERNET)]
+        [XAmazonApiGatewayRequestValidator(RequestValidator = "params-only")]        
         public IEnumerable<WeatherForecast> Get()
         {
 ```

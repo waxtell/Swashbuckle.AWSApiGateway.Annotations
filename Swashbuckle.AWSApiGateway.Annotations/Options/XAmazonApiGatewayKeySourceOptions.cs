@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
+
 // ReSharper disable CommentTypo
 
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    public class XAmazonApiGatewayKeySourceOptions : AbstractExtensionOptions
+    public class XAmazonApiGatewayKeySourceOptions : AbstractOptions
     {
         private const string ApiKeySourceKey = "x-amazon-apigateway-api-key-source";
 
@@ -19,9 +19,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// </summary>
         public ApiKeySource? ApiKeySource { get; set; }
 
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
-            var result = new Dictionary<string, IOpenApiExtension>();
+            var result = new Dictionary<string, IOpenApiAny>();
 
             if (ApiKeySource.HasValue)
             {

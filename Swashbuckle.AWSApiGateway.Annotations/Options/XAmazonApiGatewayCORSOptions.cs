@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
+
 // ReSharper disable InconsistentNaming
 
 // ReSharper disable once CheckNamespace
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
-    public class XAmazonApiGatewayCORSOptions : AbstractExtensionOptions
+    public class XAmazonApiGatewayCORSOptions : AbstractOptions
     {
         private const string CORSRootKey = "x-amazon-apigateway-cors";
         private const string AllowOriginsKey = "allowOrigins";
@@ -43,7 +43,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// </summary>
         public IEnumerable<string> AllowHeaders { get; set; }
 
-        internal override IDictionary<string, IOpenApiExtension> ToDictionary()
+        internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             var children = new OpenApiObject();
 
@@ -89,7 +89,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 children[AllowHeadersKey] = allowHeaders;
             }
 
-            return new Dictionary<string, IOpenApiExtension>()
+            return new Dictionary<string, IOpenApiAny>()
             {
                 { CORSRootKey, children }
             };

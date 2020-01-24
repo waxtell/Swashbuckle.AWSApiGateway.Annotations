@@ -20,7 +20,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         {
             void Apply<TAttribute, TOptions, TIOptions>(TOptions optionsClone, TOptions source) 
                 where TAttribute : AbstractTrackingAttribute, TIOptions
-                where TOptions : AbstractExtensionOptions, TIOptions
+                where TOptions : AbstractOptions, TIOptions
 
             {
                 var attributes = context
@@ -43,18 +43,18 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 }
             }
 
-            XAmazonApiGatewayIntegrationOptions CreateDefaultIntegrationOptions(string baseUri)
+            XAmazonApiGatewayIntegrationOptions CreateDefaultIntegrationOptions(OperationFilterContext ctx, string baseUri)
             {
                 return new XAmazonApiGatewayIntegrationOptions
                 {
-                    HttpMethod = context.ApiDescription.HttpMethod,
-                    Uri = new Uri(new Uri(baseUri), context.ApiDescription.RelativePath).ToString()
+                    HttpMethod = ctx.ApiDescription.HttpMethod,
+                    Uri = new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString()
                 };
             }
 
             Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>
             (
-                CreateDefaultIntegrationOptions(_options.IntegrationOptions.BaseUri),
+                CreateDefaultIntegrationOptions(context,_options.IntegrationOptions.BaseUri),
                 _options.IntegrationOptions
             );
 
@@ -62,6 +62,12 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             (
                 new XAmazonApiGatewayAuthOptions(), 
                 _options.AuthOptions
+            );
+
+            Apply<XAmazonApiGatewayRequestValidatorAttribute, XAmazonApiGatewayRequestValidatorOptions, IXAmazonApiGatewayRequestValidatorOptions>
+            (
+                new XAmazonApiGatewayRequestValidatorOptions(),
+                null
             );
         }
     }
