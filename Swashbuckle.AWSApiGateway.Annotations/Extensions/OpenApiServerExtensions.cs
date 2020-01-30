@@ -7,6 +7,20 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
     public static class OpenApiServerExtensions
     {
         /// <summary>
+        /// Convenience extension method for adding a variable to a server instance
+        /// </summary>
+        /// <param name="server">The server that will receive the new variable</param>
+        /// <param name="key">The variable name (e.g. basePath)</param>
+        /// <param name="value">The value for the variable</param>
+        /// <returns></returns>
+        public static OpenApiServer WithVariable(this OpenApiServer server, string key, OpenApiServerVariable value)
+        {
+            server.Variables.Add(key, value);
+
+            return server;
+        }
+
+        /// <summary>
         /// PRIVATE: For a private API.
         /// </summary>
         /// <param name="server"></param>
