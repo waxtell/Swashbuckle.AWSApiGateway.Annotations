@@ -18,6 +18,20 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <summary>
         /// Specify the source to receive an API key to throttle API methods that require a key.
         /// </summary>
+        /// <param name="apiKeySource">HEADER or AUTHORIZER</param>
+        public XAmazonApiGatewayOptions WithKeySource(ApiKeySource apiKeySource)
+        {
+            _apiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions
+            {
+                ApiKeySource = apiKeySource
+            };
+
+            return this;
+        }
+
+        /// <summary>
+        /// Specify the source to receive an API key to throttle API methods that require a key.
+        /// </summary>
         /// <param name="setupAction"></param>
         public XAmazonApiGatewayOptions WithKeySource(Action<XAmazonApiGatewayKeySourceOptions> setupAction)
         {

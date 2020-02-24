@@ -45,13 +45,7 @@ namespace SampleApp9000
                     options =>
                     {
                         options
-                            .WithKeySource
-                            (
-                                kso =>
-                                {
-                                    kso.ApiKeySource = ApiKeySource.Header;
-                                }
-                            )
+                            .WithKeySource(ApiKeySource.Header)
                             .WithBinaryMediaTypes
                             (
                                 bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}    
@@ -132,22 +126,22 @@ namespace SampleApp9000
                                 //.AsRegionalEndpoint("yourcustomdomain.com")
                             };
                         });
-
-                        // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-                        // specifying the Swagger JSON endpoint.
-                        app.UseSwaggerUI(x =>
-                        {
-                            x.DocumentTitle = "SampleApp9000";
-                            x.SwaggerEndpoint("/swagger/sampleapp/swagger.json", "Sample App 9000");
-                            x.RoutePrefix = string.Empty;
-                        });
-
-                        app
-                            .UseEndpoints
-                            (
-                                endpoints => { endpoints.MapControllers(); }
-                            );
                     }
+                );
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(x =>
+            {
+                x.DocumentTitle = "SampleApp9000";
+                x.SwaggerEndpoint("/swagger/sampleapp/swagger.json", "Sample App 9000");
+                x.RoutePrefix = string.Empty;
+            });
+
+            app
+                .UseEndpoints
+                (
+                    endpoints => { endpoints.MapControllers(); }
                 );
         }
     }

@@ -13,13 +13,7 @@ Setting document centric configuration:
                     options =>
                     {
                         options
-                            .WithKeySource
-                            (
-                                kso =>
-                                {
-                                    kso.ApiKeySource = ApiKeySource.Header;
-                                }
-                            )
+                            .WithKeySource(ApiKeySource.Header)
                             .WithRequestValidators
                             (
                                 rv => rv.RequestValidators = new []
