@@ -45,13 +45,7 @@ namespace SampleApp9000
                     options =>
                     {
                         options
-                            .WithKeySource
-                            (
-                                kso =>
-                                {
-                                    kso.ApiKeySource = ApiKeySource.Header;
-                                }
-                            )
+                            .WithKeySource(ApiKeySource.Header)
                             .WithBinaryMediaTypes
                             (
                                 bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}    
