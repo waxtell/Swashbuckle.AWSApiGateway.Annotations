@@ -117,9 +117,9 @@ namespace SampleApp9000
                             {
                                 new OpenApiServer
                                 {
-                                    Url = "https://www.yourcustomdomain.com{basePath}"
+                                    Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{{basePath}}"
                                 }
-                                .WithVariable("basePath", new OpenApiServerVariable { Default = "/sample"})
+                                .WithVariable("basePath", new OpenApiServerVariable { Default = "/"})
                                 .AsRegionalEndpoint()
                                 //.AsEdgeEndpoint("yourcustomdomain.com")
                                 //.AsPrivateEndpoint("vpcid1", "vpcid2", "vpcid3")
