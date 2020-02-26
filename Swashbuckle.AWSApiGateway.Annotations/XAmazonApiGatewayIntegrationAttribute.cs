@@ -67,12 +67,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             set => _ixAmazonApiGatewayOperationOptionsImplementation.Uri = value;
         }
 
-        public string RequestParameters
-        {
-            get => _ixAmazonApiGatewayOperationOptionsImplementation.RequestParameters;
-            set => _ixAmazonApiGatewayOperationOptionsImplementation.RequestParameters = value;
-        }
-
         public string RequestTemplates
         {
             get => _ixAmazonApiGatewayOperationOptionsImplementation.RequestTemplates;

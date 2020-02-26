@@ -81,6 +81,10 @@ namespace SampleApp9000
                                 {
                                     intOpt.Type = IntegrationType.http_proxy;
                                     intOpt.BaseUri = "https://your.domain.com";
+                                    intOpt.RequestParameters = new Dictionary<string, string>
+                                    {
+                                        { "integration.request.header.x-userid", "method.request.header.x-user-id" }
+                                    };
                                 }
                             )
                             .WithAuth
@@ -117,9 +121,9 @@ namespace SampleApp9000
                             {
                                 new OpenApiServer
                                 {
-                                    Url = "https://www.yourcustomdomain.com{basePath}"
+                                    Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{{basePath}}"
                                 }
-                                .WithVariable("basePath", new OpenApiServerVariable { Default = "/sample"})
+                                .WithVariable("basePath", new OpenApiServerVariable { Default = "/"})
                                 .AsRegionalEndpoint()
                                 //.AsEdgeEndpoint("yourcustomdomain.com")
                                 //.AsPrivateEndpoint("vpcid1", "vpcid2", "vpcid3")

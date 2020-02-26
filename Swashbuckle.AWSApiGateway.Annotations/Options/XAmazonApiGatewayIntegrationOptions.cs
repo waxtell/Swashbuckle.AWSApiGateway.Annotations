@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.OpenApi.Any;
 // ReSharper disable UnusedMemberInSuper.Global
 
@@ -62,11 +63,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         string Uri { get; set; }
 
         /// <summary>
-        /// Specifies mappings from method request parameters to integration request parameters. Supported request parameters are querystring, path, header, and body.
-        /// </summary>
-        string RequestParameters { get; set; }
-
-        /// <summary>
         /// Mapping templates for a request payload of specified MIME types.
         /// </summary>
         string RequestTemplates { get; set; }
@@ -104,7 +100,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         private int _timeoutInMillis;
         private IntegrationType _type;
         private string _uri;
-        private string _requestParameters;
         private string _requestTemplates;
         private string _responses;
 
@@ -168,11 +163,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
             set { _uri = value; OnPropertyChanged(); }
         }
 
-        public string RequestParameters
-        {
-            get => _requestParameters;
-            set { _requestParameters = value; OnPropertyChanged(); }
-        }
+        public IDictionary<string, string> RequestParameters { get; set; }
 
         public string RequestTemplates
         {
@@ -235,9 +226,14 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
                 children[CacheNamespaceKey] = new OpenApiString(CacheNamespace);
             }
 
-            if (HasPropertyChanged(nameof(RequestParameters)))
+            if(RequestParameters != null && RequestParameters.Any())
             {
-                children[RequestParametersKey] = new OpenApiString(RequestParameters);
+                var requestParametersObject = new OpenApiObject();
+                foreach (var item in RequestParameters)
+                {
+                    requestParametersObject[item.Key] = new OpenApiString(item.Value); 
+                }
+                children[RequestParametersKey] = requestParametersObject;
             }
 
             if (HasPropertyChanged(nameof(RequestTemplates)))
