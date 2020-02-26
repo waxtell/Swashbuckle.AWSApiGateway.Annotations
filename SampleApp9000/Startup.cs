@@ -81,6 +81,10 @@ namespace SampleApp9000
                                 {
                                     intOpt.Type = IntegrationType.http_proxy;
                                     intOpt.BaseUri = "https://your.domain.com";
+                                    intOpt.RequestParameters = new Dictionary<string, string>
+                                    {
+                                        { "integration.request.header.x-userid", "method.request.header.x-user-id" }
+                                    };
                                 }
                             )
                             .WithAuth

@@ -1,6 +1,7 @@
 ﻿using System;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
@@ -45,10 +46,28 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
             XAmazonApiGatewayIntegrationOptions CreateDefaultIntegrationOptions(OperationFilterContext ctx, string baseUri)
             {
+                var requestParameters =
+                ctx
+                    .ApiDescription
+                    .ParameterDescriptions
+                    .Where(x => x.Source == BindingSource.Path)
+                    .ToDictionary
+                    (
+                        key => $"integration.request.path.{key.Name}",
+                        value => $"method.request.path.{value.Name}"
+                    )
+                    .Union
+                    (
+                        context
+                            .GetControllerAndActionAttributes<XAmazonApiGatewayIntegrationRequestParameterAttribute>()
+                            .ToDictionary(key => key.IntegrationRequestParameter, value => value.MethodRequestParameter)
+                    );
+
                 return new XAmazonApiGatewayIntegrationOptions
                 {
                     HttpMethod = ctx.ApiDescription.HttpMethod,
-                    Uri = new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString()
+                    Uri = new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString(),
+                    RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
                 };
             }
 
