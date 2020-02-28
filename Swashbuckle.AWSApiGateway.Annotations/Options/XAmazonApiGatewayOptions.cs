@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.OpenApi.Any;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
@@ -9,11 +10,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 {
     public class XAmazonApiGatewayOptions : AbstractOptions
     {
-        private XAmazonApiGatewayKeySourceOptions _apiKeySourceOptions;
-        private XAmazonApiGatewayCORSOptions _corsOptions;
-        private XAmazonApiGatewayBinaryMediaTypesOptions _binaryMediaTypesOptions;
-        private XAmazonApiGatewayRequestValidators _amazonApiGatewayRequestValidators;
-        private XAmazonApiGatewayRequestValidatorOptions _requestValidatorOptions;
+        internal XAmazonApiGatewayKeySourceOptions ApiKeySourceOptions { get; private set; }
+        internal XAmazonApiGatewayCORSOptions CorsOptions { get; private set; }
+        internal XAmazonApiGatewayBinaryMediaTypesOptions BinaryMediaTypesOptions { get; private set; }
+        internal XAmazonApiGatewayRequestValidators AmazonApiGatewayRequestValidators { get; private set; }
+        internal XAmazonApiGatewayRequestValidatorOptions RequestValidatorOptions { get; private set; }
 
         /// <summary>
         /// Specify the source to receive an API key to throttle API methods that require a key.
@@ -21,7 +22,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <param name="apiKeySource">HEADER or AUTHORIZER</param>
         public XAmazonApiGatewayOptions WithKeySource(ApiKeySource apiKeySource)
         {
-            _apiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions
+            ApiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions
             {
                 ApiKeySource = apiKeySource
             };
@@ -35,9 +36,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <param name="setupAction"></param>
         public XAmazonApiGatewayOptions WithKeySource(Action<XAmazonApiGatewayKeySourceOptions> setupAction)
         {
-            _apiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions();
+            ApiKeySourceOptions = new XAmazonApiGatewayKeySourceOptions();
 
-            setupAction.Invoke(_apiKeySourceOptions);
+            setupAction.Invoke(ApiKeySourceOptions);
 
             return this;
         }
@@ -48,27 +49,41 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <param name="setupAction"></param>
         public XAmazonApiGatewayOptions WithCors(Action<XAmazonApiGatewayCORSOptions> setupAction)
         {
-            _corsOptions = new XAmazonApiGatewayCORSOptions();
+            CorsOptions = new XAmazonApiGatewayCORSOptions();
 
-            setupAction.Invoke(_corsOptions);
+            setupAction.Invoke(CorsOptions);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Specifies the cross-origin resource sharing (CORS) configuration for an HTTP API. The extension applies to the root-level OpenAPI structure.
+        /// </summary>
+        /// <param name="policy">The CorsPolicy from your Api</param>
+        /// <param name="setupAction"></param>/// 
+        public XAmazonApiGatewayOptions WithCors(CorsPolicy policy, Action<XAmazonApiGatewayCORSOptions> setupAction)
+        {
+            CorsOptions = XAmazonApiGatewayCORSOptionsFactory.FromCorsPolicy(policy);
+
+            setupAction.Invoke(CorsOptions);
 
             return this;
         }
 
         public XAmazonApiGatewayOptions WithBinaryMediaTypes(Action<XAmazonApiGatewayBinaryMediaTypesOptions> setupAction)
         {
-            _binaryMediaTypesOptions = new XAmazonApiGatewayBinaryMediaTypesOptions();
+            BinaryMediaTypesOptions = new XAmazonApiGatewayBinaryMediaTypesOptions();
 
-            setupAction.Invoke(_binaryMediaTypesOptions);
+            setupAction.Invoke(BinaryMediaTypesOptions);
 
             return this;
         }
 
         public XAmazonApiGatewayOptions WithRequestValidators(Action<XAmazonApiGatewayRequestValidators> setupAction)
         {
-            _amazonApiGatewayRequestValidators = new XAmazonApiGatewayRequestValidators();
+            AmazonApiGatewayRequestValidators = new XAmazonApiGatewayRequestValidators();
 
-            setupAction.Invoke(_amazonApiGatewayRequestValidators);
+            setupAction.Invoke(AmazonApiGatewayRequestValidators);
 
             return this;
         }
@@ -81,9 +96,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// <returns></returns>
         public XAmazonApiGatewayOptions WithRequestValidator(Action<XAmazonApiGatewayRequestValidatorOptions> setupAction)
         {
-            _requestValidatorOptions = new XAmazonApiGatewayRequestValidatorOptions();
+            RequestValidatorOptions = new XAmazonApiGatewayRequestValidatorOptions();
 
-            setupAction.Invoke(_requestValidatorOptions);
+            setupAction.Invoke(RequestValidatorOptions);
 
             return this;
         }
@@ -91,11 +106,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             return
-                (_apiKeySourceOptions?.ToDictionary() ?? new Dictionary<string, IOpenApiAny>())
-                    .Union(_corsOptions?.ToDictionary())
-                    .Union(_binaryMediaTypesOptions?.ToDictionary())
-                    .Union(_amazonApiGatewayRequestValidators?.ToDictionary())
-                    .Union(_requestValidatorOptions?.ToDictionary())
+                (ApiKeySourceOptions?.ToDictionary() ?? new Dictionary<string, IOpenApiAny>())
+                    .Union(CorsOptions?.ToDictionary())
+                    .Union(BinaryMediaTypesOptions?.ToDictionary())
+                    .Union(AmazonApiGatewayRequestValidators?.ToDictionary())
+                    .Union(RequestValidatorOptions?.ToDictionary())
                 ;
         }
     }

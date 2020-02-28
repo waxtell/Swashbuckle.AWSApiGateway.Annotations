@@ -5,7 +5,9 @@
     <Description>Provides programmatic support for including AWS API Gateway custom annotations at OAS "build" time.</Description>
     <Authors>Will Axtell</Authors>
     <PackageTags>OAS AWS Gateway x-amazon-apigateway</PackageTags>
-    <PackageReleaseNotes>2.2.0- Improved support for RequestParameters (breaking change!)
+    <PackageReleaseNotes>2.3.1- Add factory for creating cors config from MS CorsPolicy
+2.3.0- Optionally emit OPTIONS method for CORS support
+2.2.0- Improved support for RequestParameters (breaking change!)
 2.1.2- Add convenience extension for setting api key source
 2.1.1- Add AddVariable server extension method
 2.1.0- Added support for request validators
@@ -17,7 +19,7 @@
 1.0.3- supply default values for operation values (HttpMethod and Uri)
 1.0.2- only include document level annotations that are explicitly initialized
 1.0.1- now supports key source, cors, integration and auth annotations</PackageReleaseNotes>
-    <Version>2.2.0</Version>
+    <Version>2.3.1</Version>
     <PackageProjectUrl>https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations</PackageProjectUrl>
     <RepositoryUrl>https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

@@ -43,6 +43,12 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         /// </summary>
         public IEnumerable<string> AllowHeaders { get; set; }
 
+        /// <summary>
+        /// Generate an OPTIONS mock method to support CORS handshaking.
+        /// Set to true to create a mock OPTIONS method for all paths that do not already have an OPTIONS method
+        /// </summary>
+        public bool EmitOptionsMockMethod { get; set; } = false;
+
         internal override IDictionary<string, IOpenApiAny> ToDictionary()
         {
             var children = new OpenApiObject();

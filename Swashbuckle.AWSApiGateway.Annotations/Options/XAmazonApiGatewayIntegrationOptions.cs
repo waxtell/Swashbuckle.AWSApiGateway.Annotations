@@ -61,16 +61,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         /// The endpoint URI of the backend. For integrations of the aws type, this is an ARN value. For the HTTP integration, this is the URL of the HTTP endpoint including the https or http scheme.
         /// </summary>
         string Uri { get; set; }
-
-        /// <summary>
-        /// Mapping templates for a request payload of specified MIME types.
-        /// </summary>
-        string RequestTemplates { get; set; }
-
-        /// <summary>
-        /// Defines the method's responses and specifies desired parameter mappings or payload mappings from integration responses to method responses.
-        /// </summary>
-        string Responses { get; set; }
     }
 
     public class XAmazonApiGatewayIntegrationOptions : AbstractOptions, IXAmazonApiGatewayIntegrationOptions
@@ -88,7 +78,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         private const string PassthroughBehaviorKey = "passthroughBehavior";
         private const string RequestParametersKey = "requestParameters";
         private const string RequestTemplatesKey = "requestTemplates";
-        private const string ResponsesKey = "responses";
 
         private PassthroughBehavior _passthroughBehavior;
         private string _httpMethod;
@@ -100,8 +89,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
         private int _timeoutInMillis;
         private IntegrationType _type;
         private string _uri;
-        private string _requestTemplates;
-        private string _responses;
 
         public PassthroughBehavior PassthroughBehavior
         {
@@ -165,17 +152,15 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
 
         public IDictionary<string, string> RequestParameters { get; set; }
 
-        public string RequestTemplates
-        {
-            get => _requestTemplates;
-            set { _requestTemplates = value; OnPropertyChanged(); }
-        }
+        /// <summary>
+        /// Mapping templates for a request payload of specified MIME types.
+        /// </summary>
+        public IDictionary<string,string> RequestTemplates { get; set; }
 
-        public string Responses
-        {
-            get => _responses;
-            set { _responses = value; OnPropertyChanged(); }
-        }
+        /// <summary>
+        /// Defines the method's responses and specifies desired parameter mappings or payload mappings from integration responses to method responses.
+        /// </summary>
+        public Dictionary<string, IntegrationResponse> Responses { get; set; }
 
         /// <summary>
         /// The BaseUri will be used to generate the Uri value for operations where a Uri value is not explicitly provided.
@@ -236,14 +221,33 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Options
                 children[RequestParametersKey] = requestParametersObject;
             }
 
-            if (HasPropertyChanged(nameof(RequestTemplates)))
+            if (RequestTemplates != null && RequestTemplates.Any())
             {
-                children[RequestTemplatesKey] = new OpenApiString(RequestTemplates);
+                var requestTemplatesObject = new OpenApiObject();
+                foreach (var item in RequestTemplates)
+                {
+                    requestTemplatesObject[item.Key] = new OpenApiString(item.Value);
+                }
+
+                children[RequestTemplatesKey] = requestTemplatesObject;
             }
 
-            if (HasPropertyChanged(nameof(Responses)))
+            if (Responses != null && Responses.Any())
             {
-                children[ResponsesKey] = new OpenApiString(Responses);
+                var responsesContainer = new OpenApiObject();
+
+                foreach (var response in Responses)
+                {
+                    var responseContainer = new OpenApiObject();
+                    foreach (var item in response.Value.ToDictionary())
+                    {
+                        responseContainer[item.Key] = item.Value;
+                    }
+
+                    responsesContainer[response.Key] = responseContainer;
+                }
+
+                children["responses"] = responsesContainer;
             }
 
             if (HasPropertyChanged(nameof(ContentHandling)))
