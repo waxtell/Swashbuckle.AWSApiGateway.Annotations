@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations;
 using Swashbuckle.AWSApiGateway.Annotations.Enums;
@@ -48,11 +49,11 @@ namespace SampleApp9000
                             .WithKeySource(ApiKeySource.Header)
                             .WithBinaryMediaTypes
                             (
-                                bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}    
+                                bmtOptions => bmtOptions.BinaryMediaTypes = new[] {MediaTypeNames.Image.Jpeg}
                             )
                             .WithRequestValidators
                             (
-                                rv => rv.RequestValidators = new []
+                                rv => rv.RequestValidators = new[]
                                 {
                                     new RequestValidator("basic")
                                     {
@@ -66,7 +67,27 @@ namespace SampleApp9000
                                     }
                                 }
                             )
-                            .WithRequestValidator(rvo => rvo.RequestValidator = "basic");
+                            .WithRequestValidator(rvo => rvo.RequestValidator = "basic")
+                            .WithCors
+                            (
+                                corsSetup =>
+                                {
+                                    corsSetup.AllowCredentials = true;
+                                    corsSetup.AllowHeaders = new[]
+                                    {
+                                        HeaderNames.CacheControl,
+                                        HeaderNames.Pragma,
+                                        HeaderNames.ContentType,
+                                        "X-Amz-Date",
+                                        HeaderNames.Authorization,
+                                        "X-Api-Key",
+                                        "x-requested-with"
+                                    };
+                                    corsSetup.AllowOrigins = new[] {"*"};
+                                    corsSetup.AllowMethods = new[] {"POST", "GET", "OPTIONS"};
+                                    corsSetup.EmitOptionsMockMethod = true;
+                                }
+                            );
                     }
                 );
 
