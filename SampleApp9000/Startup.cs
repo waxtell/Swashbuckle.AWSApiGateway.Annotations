@@ -83,7 +83,7 @@ namespace SampleApp9000
                                         "X-Api-Key",
                                         "x-requested-with"
                                     };
-                                    corsSetup.AllowOrigins = new[] {"'*'"};
+                                    corsSetup.AllowOrigins = new[] {"*"};
                                     corsSetup.AllowMethods = new[] {"POST", "GET", "OPTIONS"};
                                     corsSetup.EmitOptionsMockMethod = true;
                                 }
