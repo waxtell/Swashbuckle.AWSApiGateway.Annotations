@@ -1,6 +1,9 @@
 # Swashbuckle.AWSApiGateway.Annotations
 Extend your OAS generation to include AWS Api Gateway annotations
 
+![Build](https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations/workflows/Build/badge.svg)
+![Publish to nuget](https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations/workflows/Publish%20to%20nuget/badge.svg?branch=master)
+
 Getting started
 
 Setting document centric configuration:
