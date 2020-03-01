@@ -40,6 +40,18 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                         HeaderNames.AccessControlExposeHeaders,
                         () => new OpenApiHeader { Schema = new OpenApiSchema { Type = "string" } }
                     )
+                    .ConditionalAdd
+                    (
+                        () => options.MaxAge.HasValue,
+                        HeaderNames.AccessControlMaxAge,
+                        () => new OpenApiHeader { Schema = new OpenApiSchema { Type = "string" } }
+                    )
+                    .ConditionalAdd
+                    (
+                        () => options.AllowCredentials.HasValue && options.AllowCredentials.Value,
+                        HeaderNames.AccessControlAllowCredentials,
+                        () => new OpenApiHeader { Schema = new OpenApiSchema { Type = "string" } }
+                    )
             };
 
             return new OpenApiOperation
@@ -48,7 +60,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             };
         }
 
-        public static OpenApiOperation FromCORSOptions(XAmazonApiGatewayCORSOptions options)
+        internal static OpenApiOperation FromCorsOptions(XAmazonApiGatewayCORSOptions options)
         {
             var corsOptionOperation = BuildCorsOptionOperation(options);
 
@@ -87,6 +99,18 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                                     () => options?.ExposeHeaders != null && options.ExposeHeaders.Any(),
                                     $"method.response.header.{HeaderNames.AccessControlExposeHeaders}",
                                     () => $"'{string.Join(",", options.ExposeHeaders)}'"
+                                )
+                                .ConditionalAdd
+                                (
+                                    () => options.MaxAge.HasValue,
+                                    HeaderNames.AccessControlMaxAge,
+                                    () => options.MaxAge.Value.ToString()
+                                )
+                                .ConditionalAdd
+                                (
+                                    () => options.AllowCredentials.HasValue && options.AllowCredentials.Value,
+                                    HeaderNames.AccessControlAllowCredentials ,
+                                    () => bool.TrueString.ToLower()
                                 )
                         }
                     }
