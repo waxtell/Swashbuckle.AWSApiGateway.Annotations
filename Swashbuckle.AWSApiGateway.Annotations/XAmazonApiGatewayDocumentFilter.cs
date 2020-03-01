@@ -26,7 +26,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
             if (_options.CorsOptions != null && _options.CorsOptions.EmitOptionsMockMethod)
             {
-                var optionsMethod = OpenApiOperationFactory.FromCORSOptions(_options.CorsOptions);
+                var optionsMethod = OpenApiOperationFactory.FromCorsOptions(_options.CorsOptions);
 
                 foreach (var path in swaggerDoc.Paths.Where(x => !x.Value.Operations.ContainsKey(OperationType.Options)))
                 {

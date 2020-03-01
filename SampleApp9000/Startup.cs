@@ -72,7 +72,6 @@ namespace SampleApp9000
                             (
                                 corsSetup =>
                                 {
-                                    corsSetup.AllowCredentials = true;
                                     corsSetup.AllowHeaders = new[]
                                     {
                                         HeaderNames.CacheControl,
