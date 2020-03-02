@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
@@ -14,7 +16,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations
             var response = new OpenApiResponse
             {
                 Description = "Success",
-                Content = new Dictionary<string, OpenApiMediaType>(),
+                // AWS needs an empty content dictionary.  Unfortunately the OpenApiResponse serializer
+                // considers the Content collection optional and will not serialize and empty dictionary.
+                // Hence, an empty content dictionary is added below as an extension.
+                // Content = new Dictionary<string, OpenApiMediaType>(),
+                Extensions = new Dictionary<string, IOpenApiExtension>() { { "content", new OpenApiObject() } },
                 Headers = new Dictionary<string, OpenApiHeader>()
                     .ConditionalAdd
                     (

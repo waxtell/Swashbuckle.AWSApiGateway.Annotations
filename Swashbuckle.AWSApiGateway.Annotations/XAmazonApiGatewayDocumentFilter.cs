@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AWSApiGateway.Annotations.Extensions;
-using Swashbuckle.AWSApiGateway.Annotations.Options;
-using Microsoft.Net.Http.Headers;
 
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
