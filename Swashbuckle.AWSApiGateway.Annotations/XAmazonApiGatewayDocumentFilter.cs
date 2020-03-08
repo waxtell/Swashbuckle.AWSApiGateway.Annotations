@@ -22,11 +22,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
             if (_options.CorsOptions != null && _options.CorsOptions.EmitOptionsMockMethod)
             {
-                var optionsMethod = OpenApiOperationFactory.FromCorsOptions(_options.CorsOptions);
-
                 foreach (var path in swaggerDoc.Paths.Where(x => !x.Value.Operations.ContainsKey(OperationType.Options)))
                 {
-                    path.Value.Operations[OperationType.Options] = optionsMethod;
+                    path.Value.Operations[OperationType.Options] = OpenApiOperationFactory.FromCorsOptions(_options.CorsOptions, path.Value);
                 }
             }
         }

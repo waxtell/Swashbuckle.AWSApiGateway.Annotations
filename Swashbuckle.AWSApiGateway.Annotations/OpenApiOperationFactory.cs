@@ -11,7 +11,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 {
     internal class OpenApiOperationFactory
     {
-        private static OpenApiOperation BuildCorsOptionOperation(XAmazonApiGatewayCORSOptions options)
+        private static OpenApiOperation BuildCorsOptionOperation(XAmazonApiGatewayCORSOptions options, OpenApiPathItem path)
         {
             var response = new OpenApiResponse
             {
@@ -62,13 +62,14 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
             return new OpenApiOperation
             {
-                Responses = new OpenApiResponses { { "200", response } }
+                Responses = new OpenApiResponses { { "200", response } },
+                Parameters = path.Operations.Select(x => x.Value).FirstOrDefault()?.Parameters
             };
         }
 
-        internal static OpenApiOperation FromCorsOptions(XAmazonApiGatewayCORSOptions options)
+        internal static OpenApiOperation FromCorsOptions(XAmazonApiGatewayCORSOptions options, OpenApiPathItem path)
         {
-            var corsOptionOperation = BuildCorsOptionOperation(options);
+            var corsOptionOperation = BuildCorsOptionOperation(options,path);
 
             var integrationOptions = new XAmazonApiGatewayIntegrationOptions
             {
