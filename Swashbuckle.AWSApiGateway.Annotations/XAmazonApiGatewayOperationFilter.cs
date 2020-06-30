@@ -63,12 +63,25 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                             .ToDictionary(key => key.IntegrationRequestParameter, value => value.MethodRequestParameter)
                     );
 
-                return new XAmazonApiGatewayIntegrationOptions
+                if (Uri.IsWellFormedUriString(baseUri, UriKind.RelativeOrAbsolute))
                 {
-                    HttpMethod = ctx.ApiDescription.HttpMethod,
-                    Uri = new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString(),
-                    RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
-                };
+                    return new XAmazonApiGatewayIntegrationOptions
+                    {
+                        HttpMethod = ctx.ApiDescription.HttpMethod,
+                        Uri = new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString(),
+                        RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
+                    };
+                }
+                else
+                {
+                    var placeholderBaseUrl = "http://www.domain.com";
+                    return new XAmazonApiGatewayIntegrationOptions
+                    {
+                        HttpMethod = ctx.ApiDescription.HttpMethod,
+                        Uri = new Uri(new Uri(placeholderBaseUrl), ctx.ApiDescription.RelativePath).ToString().Replace(placeholderBaseUrl, baseUri),
+                        RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
+                    };
+                }
             }
 
             Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>
