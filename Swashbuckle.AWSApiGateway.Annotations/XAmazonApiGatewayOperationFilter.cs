@@ -2,6 +2,7 @@
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
@@ -66,7 +67,9 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 return new XAmazonApiGatewayIntegrationOptions
                 {
                     HttpMethod = ctx.ApiDescription.HttpMethod,
-                    Uri = new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString(),
+                    Uri = Uri.IsWellFormedUriString(baseUri, UriKind.RelativeOrAbsolute)
+                            ? new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString()
+                            : $@"{baseUri}{(baseUri.EndsWith("/") ? string.Empty : "/")}{ctx.ApiDescription.RelativePath}",
                     RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
                 };
             }
@@ -88,6 +91,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 new XAmazonApiGatewayRequestValidatorOptions(),
                 null
             );
-        }
+       }
     }
 }
