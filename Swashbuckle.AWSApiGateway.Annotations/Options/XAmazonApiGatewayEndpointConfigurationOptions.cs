@@ -12,11 +12,18 @@ namespace Swashbuckle.AWSApiGateway.Annotations
         private const string EndpointConfigurationRootKey = "x-amazon-apigateway-endpoint-configuration";
         private const string TypesKey = "types";
         private const string VpcEndpointIdsKey = "vpcEndpointIds";
+        private const string DisableExecuteApiEndpointKey = "disableExecuteApiEndpoint";
 
         /// <summary>
         /// A list of VpcEndpoint identifiers against which to create Route 53 ALIASes for a REST Api. It is only supported for (PRIVATE) endpoint type.
         /// </summary>
         public IEnumerable<string> VpcEndpointIds { get; set; }
+
+        /// <summary>
+        /// Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint.
+        /// </summary>
+        public bool? DisableExecuteApiEndpoint { get; set; }
+
         /// <summary>
         /// A list of endpoint types of an API or its custom domain name. Valid values include:
         /// EDGE: For an edge-optimized API and its custom domain name.
@@ -43,6 +50,11 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 vpcIds.AddRange(VpcEndpointIds.Select(x => new OpenApiString(x)));
 
                 children[VpcEndpointIdsKey] = vpcIds;
+            }
+
+            if (DisableExecuteApiEndpoint.HasValue)
+            {
+                children[DisableExecuteApiEndpointKey] = new OpenApiString(DisableExecuteApiEndpoint.Value.ToString());
             }
 
             return new Dictionary<string, IOpenApiAny>()

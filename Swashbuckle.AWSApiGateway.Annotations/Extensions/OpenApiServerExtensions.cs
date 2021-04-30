@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 
 namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
@@ -81,6 +82,24 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
                     );
         }
 
+        /// <summary>
+        /// Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint.
+        /// </summary>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        public static OpenApiServer DisableExecuteApiEndpoint(this OpenApiServer server)
+        {
+            return
+                server
+                    .WithEndpointConfiguration
+                    (
+                        config =>
+                        {
+                            config.DisableExecuteApiEndpoint = true;
+                        }
+                    );
+        }
+
         internal static OpenApiServer WithEndpointConfiguration(this OpenApiServer server, Action<XAmazonApiGatewayEndpointConfigurationOptions> setupAction)
         {
             var options = new XAmazonApiGatewayEndpointConfigurationOptions();
@@ -89,7 +108,20 @@ namespace Swashbuckle.AWSApiGateway.Annotations.Extensions
 
             foreach (var item in options.ToDictionary())
             {
-                server.Extensions[item.Key] = item.Value;
+                if (server.Extensions.ContainsKey(item.Key) && server.Extensions[item.Key] is OpenApiObject existingEndpointConfig)
+                {
+                    if (item.Value is OpenApiObject existingConfigOptions)
+                    {
+                        foreach (var configOption in existingConfigOptions)
+                        {
+                            existingEndpointConfig[configOption.Key] = configOption.Value;
+                        }
+                    }
+                }
+                else
+                {
+                    server.Extensions[item.Key] = item.Value;
+                }
             }
 
             return server;
