@@ -54,7 +54,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
             if (DisableExecuteApiEndpoint.HasValue)
             {
-                children[DisableExecuteApiEndpointKey] = new OpenApiString(DisableExecuteApiEndpoint.Value.ToString());
+                children[DisableExecuteApiEndpointKey] = new OpenApiBoolean(DisableExecuteApiEndpoint.Value);
             }
 
             return new Dictionary<string, IOpenApiAny>()
