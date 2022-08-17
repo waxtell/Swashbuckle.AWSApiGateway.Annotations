@@ -67,9 +67,10 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 return new XAmazonApiGatewayIntegrationOptions
                 {
                     HttpMethod = ctx.ApiDescription.HttpMethod,
-                    Uri = Uri.IsWellFormedUriString(baseUri, UriKind.RelativeOrAbsolute)
+                    Uri = _options.IntegrationOptions.Uri == null ? Uri.IsWellFormedUriString(baseUri, UriKind.RelativeOrAbsolute)
                             ? new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString()
-                            : $@"{baseUri}{(baseUri.EndsWith("/") ? string.Empty : "/")}{ctx.ApiDescription.RelativePath}",
+                            : $@"{baseUri}{(baseUri.EndsWith("/") ? string.Empty : "/")}{ctx.ApiDescription.RelativePath}"
+                                : null,
                     RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
                 };
             }

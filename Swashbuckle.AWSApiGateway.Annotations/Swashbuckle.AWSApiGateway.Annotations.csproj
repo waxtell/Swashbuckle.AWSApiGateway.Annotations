@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
     <Description>Provides programmatic support for including AWS API Gateway custom annotations at OAS "build" time.</Description>
     <Authors>Will Axtell</Authors>
     <PackageTags>OAS AWS Gateway x-amazon-apigateway</PackageTags>
