@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
     <Description>Provides programmatic support for including AWS API Gateway custom annotations at OAS "build" time.</Description>
     <Authors>Will Axtell</Authors>
     <PackageTags>OAS AWS Gateway x-amazon-apigateway</PackageTags>
     <PackageReleaseNotes>
+	  2.5.0- Add support for .net6.0. Add fix for when Api option is configured with Uri instead of BaseUri. Dependencies updated.
       2.4.1- Improved the DisableExecuteApiEndpoint feature.
       2.4.0- Add support for netstandard2.1 and net5.0.  Add DisableExecuteApiEndpoint feature.
       2.3.5- More gracefully handle non-well formed BaseUri values
@@ -26,13 +27,14 @@
       1.0.2- only include document level annotations that are explicitly initialized
       1.0.1- now supports key source, cors, integration and auth annotations
     </PackageReleaseNotes>
-    <Version>2.4.1</Version>
+    <Version>2.5.0</Version>
     <PackageProjectUrl>https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations</PackageProjectUrl>
     <RepositoryUrl>https://github.com/waxtell/Swashbuckle.AWSApiGateway.Annotations.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 </Project>

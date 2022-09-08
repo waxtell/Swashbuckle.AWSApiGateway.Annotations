@@ -1,11 +1,10 @@
-﻿using System;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AWSApiGateway.Annotations.Extensions;
 using Swashbuckle.AWSApiGateway.Annotations.Options;
+using System;
+using System.Linq;
 
 namespace Swashbuckle.AWSApiGateway.Annotations
 {
@@ -20,7 +19,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            void Apply<TAttribute, TOptions, TIOptions>(TOptions optionsClone, TOptions source) 
+            void Apply<TAttribute, TOptions, TIOptions>(TOptions optionsClone, TOptions source)
                 where TAttribute : AbstractTrackingAttribute, TIOptions
                 where TOptions : AbstractOptions, TIOptions
 
@@ -35,7 +34,7 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 {
                     foreach (var attribute in attributes)
                     {
-                        optionsClone.Merge<TOptions,TIOptions,TAttribute>(attribute);
+                        optionsClone.Merge<TOptions, TIOptions, TAttribute>(attribute);
                     }
                 }
 
@@ -67,22 +66,24 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 return new XAmazonApiGatewayIntegrationOptions
                 {
                     HttpMethod = ctx.ApiDescription.HttpMethod,
-                    Uri = Uri.IsWellFormedUriString(baseUri, UriKind.RelativeOrAbsolute)
-                            ? new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString()
-                            : $@"{baseUri}{(baseUri.EndsWith("/") ? string.Empty : "/")}{ctx.ApiDescription.RelativePath}",
+                    Uri = !string.IsNullOrWhiteSpace(_options.IntegrationOptions.Uri)
+                            ? _options.IntegrationOptions.Uri
+                            : Uri.IsWellFormedUriString(baseUri, UriKind.RelativeOrAbsolute)
+                                ? new Uri(new Uri(baseUri), ctx.ApiDescription.RelativePath).ToString()
+                                : $@"{baseUri}{(baseUri?.EndsWith("/") ?? false ? string.Empty : "/")}{ctx.ApiDescription.RelativePath}",
                     RequestParameters = _options.IntegrationOptions.RequestParameters.Union(requestParameters)
                 };
             }
 
-            Apply<XAmazonApiGatewayIntegrationAttribute,XAmazonApiGatewayIntegrationOptions,IXAmazonApiGatewayIntegrationOptions>
+            Apply<XAmazonApiGatewayIntegrationAttribute, XAmazonApiGatewayIntegrationOptions, IXAmazonApiGatewayIntegrationOptions>
             (
-                CreateDefaultIntegrationOptions(context,_options.IntegrationOptions.BaseUri),
+                CreateDefaultIntegrationOptions(context, _options.IntegrationOptions.BaseUri),
                 _options.IntegrationOptions
             );
 
-            Apply<XAmazonApiGatewayAuthAttribute,XAmazonApiGatewayAuthOptions,IXAmazonApiGatewayAuthOptions>
+            Apply<XAmazonApiGatewayAuthAttribute, XAmazonApiGatewayAuthOptions, IXAmazonApiGatewayAuthOptions>
             (
-                new XAmazonApiGatewayAuthOptions(), 
+                new XAmazonApiGatewayAuthOptions(),
                 _options.AuthOptions
             );
 
@@ -91,6 +92,6 @@ namespace Swashbuckle.AWSApiGateway.Annotations
                 new XAmazonApiGatewayRequestValidatorOptions(),
                 null
             );
-       }
+        }
     }
 }
